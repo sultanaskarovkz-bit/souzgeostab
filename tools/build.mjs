@@ -206,19 +206,34 @@ function layout({ title, desc, path, schemas = [], body, crumbs, absolute }) {
   <link rel="canonical" href="${canonical}">
   <meta name="google-site-verification" content="${site.gscVerify}">
 
+  <!-- Предпросмотр ссылки в WhatsApp, Telegram, Facebook, LinkedIn.
+       Размеры указаны явно: без них мессенджеры иногда рисуют мелкую
+       квадратную превьюшку вместо широкой карточки. -->
   <meta property="og:type" content="website">
   <meta property="og:site_name" content="${esc(site.name)}">
   <meta property="og:title" content="${esc(title)}">
   <meta property="og:description" content="${esc(desc)}">
   <meta property="og:url" content="${canonical}">
   <meta property="og:image" content="${site.domain}/assets/img/og.jpg">
+  <meta property="og:image:secure_url" content="${site.domain}/assets/img/og.jpg">
+  <meta property="og:image:type" content="image/jpeg">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:image:alt" content="СоюзГеоСтаб - инъекционные технологии и геотехнические решения">
   <meta property="og:locale" content="ru_RU">
+
   <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="${esc(title)}">
+  <meta name="twitter:description" content="${esc(desc)}">
+  <meta name="twitter:image" content="${site.domain}/assets/img/og.jpg">
 
   <meta name="theme-color" content="#0d1b2a">
-  <link rel="icon" href="/assets/img/favicon.svg" type="image/svg+xml">
-  <link rel="icon" href="/assets/img/favicon-32.png" sizes="32x32">
-  <link rel="apple-touch-icon" href="/assets/img/apple-touch-icon.png">
+  <link rel="icon" href="/favicon.ico" sizes="32x32">
+  <link rel="icon" type="image/png" sizes="16x16" href="/assets/img/favicon-16.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/assets/img/favicon-32.png">
+  <link rel="icon" type="image/png" sizes="48x48" href="/assets/img/favicon-48.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="/assets/img/apple-touch-icon.png">
+  <link rel="manifest" href="/site.webmanifest">
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -1478,6 +1493,22 @@ written.push(await out('dokumenty/index.html', dokumentyPage()));  urls.push({ p
 written.push(await out('o-kompanii/index.html', oKompaniiPage())); urls.push({ path: '/o-kompanii/', priority: '0.7' });
 written.push(await out('kontakty/index.html', kontaktyPage()));    urls.push({ path: '/kontakty/', priority: '0.8' });
 written.push(await out('404.html', notFoundPage()));
+
+/* Манифест: иконка и цвета при добавлении сайта на домашний экран телефона */
+written.push(await out('site.webmanifest', JSON.stringify({
+  name: site.legalName,
+  short_name: site.name,
+  description: site.tagline,
+  start_url: '/',
+  display: 'standalone',
+  background_color: '#0d1b2a',
+  theme_color: '#0d1b2a',
+  icons: [
+    { src: '/assets/img/icon-192.png', sizes: '192x192', type: 'image/png' },
+    { src: '/assets/img/icon-512.png', sizes: '512x512', type: 'image/png' },
+    { src: '/assets/img/icon-512.png', sizes: '512x512', type: 'image/png', purpose: 'maskable' }
+  ]
+}, null, 2)));
 
 written.push(await out('sitemap.xml', sitemap(urls)));
 written.push(await out('robots.txt', `User-agent: *

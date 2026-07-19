@@ -24,7 +24,8 @@ const TYPES = {
   '.pdf': 'application/pdf',
   '.xml': 'application/xml; charset=utf-8',
   '.txt': 'text/plain; charset=utf-8',
-  '.woff2': 'font/woff2'
+  '.woff2': 'font/woff2',
+  '.webmanifest': 'application/manifest+json'
 };
 
 createServer(async (req, res) => {

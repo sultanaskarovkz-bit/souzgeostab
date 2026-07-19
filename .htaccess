@@ -83,4 +83,10 @@ ErrorDocument 404 /404.html
   </FilesMatch>
 </IfModule>
 
+# Без этого Apache отдаёт манифест как поток байтов и браузер его игнорирует
+AddType application/manifest+json .webmanifest
+AddType image/webp .webp
+AddType image/svg+xml .svg
+AddType image/x-icon .ico
+
 AddDefaultCharset UTF-8
