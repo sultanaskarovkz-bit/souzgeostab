@@ -33,35 +33,51 @@ await writeFile(join(IMG, 'logo-light.svg'), logoSrc.replace(/#67767D/gi, '#FFFF
    сохраняет фирменные цвета и читается в обеих темах браузера. */
 const PLATE = { r: 255, g: 255, b: 255 };
 
-async function icon(size, pad, plate) {
+const hex = `rgb(${PLATE.r},${PLATE.g},${PLATE.b})`;
+
+async function icon(size, pad, shape) {
   const inner = Math.round(size * (1 - pad * 2));
+  const off = Math.round((size - inner) / 2);
+
   const mark = await sharp(SRC_MARK)
     .resize(inner, inner, { fit: 'contain', background: { r: 0, g: 0, b: 0, alpha: 0 } })
     .toBuffer();
 
-  const base = plate
-    ? sharp({ create: { width: size, height: size, channels: 4, background: { ...PLATE, alpha: 1 } } })
-    : sharp({ create: { width: size, height: size, channels: 4, background: { r: 0, g: 0, b: 0, alpha: 0 } } });
+  // Подложка рисуется SVG: так круг получается со сглаженным краем,
+  // а не ступенькой, что особенно заметно на 16 и 32 пикселях.
+  const plate = shape === 'circle'
+    ? `<circle cx="${size / 2}" cy="${size / 2}" r="${size / 2}" fill="${hex}"/>`
+    : `<rect width="${size}" height="${size}" fill="${hex}"/>`;
 
-  return base
-    .composite([{ input: mark, top: Math.round((size - inner) / 2), left: Math.round((size - inner) / 2) }])
+  return sharp({
+    create: { width: size, height: size, channels: 4, background: { r: 0, g: 0, b: 0, alpha: 0 } }
+  })
+    .composite([
+      { input: Buffer.from(`<svg xmlns="http://www.w3.org/2000/svg" width="${size}" height="${size}">${plate}</svg>`), top: 0, left: 0 },
+      { input: mark, top: off, left: off }
+    ])
     .png({ compressionLevel: 9 })
     .toBuffer();
 }
 
 const jobs = [
-  { out: 'favicon-16.png',       size: 16,  pad: 0.02, plate: true },
-  { out: 'favicon-32.png',       size: 32,  pad: 0.06, plate: true },
-  { out: 'favicon-48.png',       size: 48,  pad: 0.08, plate: true },
-  { out: 'icon-192.png',         size: 192, pad: 0.14, plate: true },
-  { out: 'icon-512.png',         size: 512, pad: 0.14, plate: true },
-  // iOS не поддерживает прозрачность и подставляет чёрный — фон обязателен
-  { out: 'apple-touch-icon.png', size: 180, pad: 0.16, plate: true }
+  { out: 'favicon-16.png', size: 16,  pad: 0.02, shape: 'circle' },
+  { out: 'favicon-32.png', size: 32,  pad: 0.08, shape: 'circle' },
+  { out: 'favicon-48.png', size: 48,  pad: 0.10, shape: 'circle' },
+  { out: 'icon-192.png',   size: 192, pad: 0.16, shape: 'circle' },
+
+  // iOS не умеет прозрачность и подставляет чёрный, а углы скругляет сам.
+  // Поэтому здесь полный квадрат: круг дал бы чёрные углы вокруг него.
+  { out: 'apple-touch-icon.png', size: 180, pad: 0.18, shape: 'square' },
+
+  // Для Android-манифеста в режиме maskable система сама обрезает икону
+  // под форму лаунчера, ей тоже нужен залитый квадрат с запасом по краям.
+  { out: 'icon-512.png', size: 512, pad: 0.22, shape: 'square' }
 ];
 
 for (const j of jobs) {
-  await writeFile(join(IMG, j.out), await icon(j.size, j.pad, j.plate));
-  console.log(`  ${j.out}`);
+  await writeFile(join(IMG, j.out), await icon(j.size, j.pad, j.shape));
+  console.log(`  ${j.out} (${j.shape === 'circle' ? 'круг' : 'квадрат'})`);
 }
 
 /* favicon.ico в корне: его запрашивают браузеры и краулеры напрямую,

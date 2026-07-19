@@ -177,6 +177,11 @@ function relativize(html, path, absolute) {
   const prefix = depth > 0 ? '../'.repeat(depth) : '';
 
   return html
+    // srcset обрабатываем отдельно: внутри несколько адресов через запятую,
+    // и regex для src="/ их не видит (в «srcset=» после src идёт «set»).
+    // Браузер берёт именно srcset, поэтому пропуск ломал все фотографии.
+    .replace(/srcset="([^"]*)"/g, (_, v) =>
+      `srcset="${v.replace(/(^|,\s*)\/(?!\/)/g, `$1${prefix}`)}"`)
     // Ссылка на главную: пустая строка сломала бы href
     .replace(/(href|src)="\/"/g, `$1="${prefix || './'}"`)
     // Всё остальное от корня, кроме //cdn и полных URL
