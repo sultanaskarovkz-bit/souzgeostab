@@ -1,0 +1,86 @@
+# СоюзГеоСтаб — конфигурация Apache
+# Главное здесь — блок 301-редиректов: старые адреса Tilda уже проиндексированы,
+# и без переадресации на переезде теряется всё накопленное.
+
+Options -Indexes
+DirectoryIndex index.html index.php
+
+<IfModule mod_rewrite.c>
+  RewriteEngine On
+
+  # --- https и канонический хост ----------------------------------------
+  RewriteCond %{HTTPS} !=on
+  RewriteRule ^(.*)$ https://%{HTTP_HOST}/$1 [R=301,L]
+
+  RewriteCond %{HTTP_HOST} ^www\.(.+)$ [NC]
+  RewriteRule ^(.*)$ https://%1/$1 [R=301,L]
+
+  # --- Старые ЧПУ Tilda -> новая структура ------------------------------
+  RewriteRule ^o-nas/?$                                  /o-kompanii/                              [R=301,L]
+  RewriteRule ^kontakty\.html?$                          /kontakty/                                [R=301,L]
+  RewriteRule ^tehnologii/?$                             /tehnologii/                              [R=301,L]
+
+  RewriteRule ^transportnaya-infrastruktura/?$           /otrasli/transportnaya/                   [R=301,L]
+  RewriteRule ^gornodobyvayushchaya-otrasl/?$            /otrasli/gornodobyvayushchaya/            [R=301,L]
+  RewriteRule ^stroitelnaya-otrasl/?$                    /otrasli/stroitelnaya/                    [R=301,L]
+  RewriteRule ^gidrotekhnicheskaya-infrastruktura/?$     /otrasli/gidrotehnicheskaya/              [R=301,L]
+  RewriteRule ^toplivno-energeticheskaya-infrastruktura/?$ /otrasli/toplivno-energeticheskaya/     [R=301,L]
+  RewriteRule ^inzhenernye-izyskaniya-i-soprovozhdenie/?$ /tehnologii/geofizicheskiy-kontrol/      [R=301,L]
+
+  # --- Старые технические адреса Tilda ----------------------------------
+  RewriteRule ^page151351773\.html$   /                                          [R=301,L]
+  RewriteRule ^page124825003\.html$   /                                          [R=301,L]
+  RewriteRule ^page124813563\.html$   /                                          [R=301,L]
+  RewriteRule ^page125108153\.html$   /                                          [R=301,L]
+  RewriteRule ^page125260053\.html$   /o-kompanii/                               [R=301,L]
+  RewriteRule ^page125532463\.html$   /tehnologii/                               [R=301,L]
+  RewriteRule ^page125597943\.html$   /kontakty/                                 [R=301,L]
+  RewriteRule ^page125598063\.html$   /otrasli/transportnaya/                    [R=301,L]
+  RewriteRule ^page134650393\.html$   /otrasli/gornodobyvayushchaya/             [R=301,L]
+  RewriteRule ^page134652573\.html$   /otrasli/gidrotehnicheskaya/               [R=301,L]
+  RewriteRule ^page134655203\.html$   /otrasli/stroitelnaya/                     [R=301,L]
+  RewriteRule ^page134656523\.html$   /otrasli/toplivno-energeticheskaya/        [R=301,L]
+  RewriteRule ^page134660273\.html$   /tehnologii/geofizicheskiy-kontrol/        [R=301,L]
+  RewriteRule ^page153727883\.html$   /                                          [R=301,L]
+
+  # --- Единообразие адресов: со слешем на конце -------------------------
+  RewriteCond %{REQUEST_FILENAME} !-f
+  RewriteCond %{REQUEST_FILENAME} !-d
+  RewriteCond %{REQUEST_URI} !\.[a-zA-Z0-9]{2,5}$
+  RewriteCond %{REQUEST_URI} !/$
+  RewriteRule ^(.*)$ /$1/ [R=301,L]
+</IfModule>
+
+ErrorDocument 404 /404.html
+
+# --- Сжатие --------------------------------------------------------------
+<IfModule mod_deflate.c>
+  AddOutputFilterByType DEFLATE text/html text/plain text/css text/xml
+  AddOutputFilterByType DEFLATE application/javascript application/json
+  AddOutputFilterByType DEFLATE image/svg+xml
+</IfModule>
+
+# --- Кэширование ---------------------------------------------------------
+<IfModule mod_expires.c>
+  ExpiresActive On
+  ExpiresByType text/css                "access plus 1 year"
+  ExpiresByType application/javascript  "access plus 1 year"
+  ExpiresByType image/webp              "access plus 1 year"
+  ExpiresByType image/png               "access plus 1 year"
+  ExpiresByType image/jpeg              "access plus 1 year"
+  ExpiresByType image/svg+xml           "access plus 1 year"
+  ExpiresByType application/pdf         "access plus 1 month"
+  # HTML не кэшируем надолго: правки должны доезжать до пользователя сразу
+  ExpiresByType text/html               "access plus 0 seconds"
+</IfModule>
+
+<IfModule mod_headers.c>
+  Header set X-Content-Type-Options "nosniff"
+  Header set X-Frame-Options "SAMEORIGIN"
+  Header set Referrer-Policy "strict-origin-when-cross-origin"
+  <FilesMatch "\.(css|js|webp|png|jpe?g|svg|woff2)$">
+    Header set Cache-Control "public, max-age=31536000, immutable"
+  </FilesMatch>
+</IfModule>
+
+AddDefaultCharset UTF-8
