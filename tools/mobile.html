@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<title>Проверка мобильной вёрстки</title>
+<style>
+  body { margin:0; background:#2a2f36; font:13px system-ui; color:#cbd3dc;
+         display:flex; gap:18px; padding:14px; align-items:flex-start; }
+  .dev { display:flex; flex-direction:column; gap:6px; }
+  .dev b { font-weight:600; color:#fff; }
+  iframe { border:0; background:#0d1b2a; box-shadow:0 6px 30px rgba(0,0,0,.5); }
+</style>
+</head>
+<body>
+  <div class="dev"><b>360 (бюджетный Android)</b><iframe id="a" width="360"></iframe></div>
+  <div class="dev"><b>390 (iPhone 14/15)</b><iframe id="b" width="390"></iframe></div>
+  <div class="dev"><b>768 (планшет)</b><iframe id="c" width="768"></iframe></div>
+<script>
+  // ?p=/uslugi/ — какую страницу смотрим, ?h=3000 — высота рамки.
+  // Высокая рамка нужна, чтобы прокручивать всю страницу целиком снаружи.
+  var q = new URLSearchParams(location.search);
+  var p = q.get('p') || '/';
+  var h = q.get('h') || 780;
+  ['a','b','c'].forEach(function (id) {
+    var f = document.getElementById(id);
+    f.height = h;
+    f.src = p;
+  });
+</script>
+</body>
+</html>

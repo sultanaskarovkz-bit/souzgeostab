@@ -24,8 +24,7 @@
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Archivo:wght@600;700&family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500;600&display=swap">
-  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@600;700&family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500;600&display=swap">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap&subset=cyrillic,latin">
   <link rel="stylesheet" href="../../assets/css/main.css">
 
   <script type="application/ld+json">{"@context":"https://schema.org","@type":"Service","name":"Подземные сооружения","description":"Работы внутри подземного пространства: герметизация водопритоков, укрепление массива и стабилизация тоннелей, шахтных стволов, камер и подземных выработок.","url":"https://souyzgeostab.kz/otrasli/podzemnye-sooruzheniya/","serviceType":"Подземные сооружения","provider":{"@type":"Organization","name":"ТОО «СоюзГеоСтаб»","url":"https://souyzgeostab.kz"},"areaServed":{"@type":"Country","name":"Казахстан"}}</script>
@@ -36,8 +35,8 @@
 <a class="skip-link" href="#main">Перейти к содержанию</a>
 <header class="header">
   <div class="wrap header__inner">
-    <a class="header__brand" href="../../" aria-label="СоюзГеоСтаб — на главную">
-      <img class="header__logo" src="../../assets/img/logo.svg" alt="СоюзГеоСтаб" width="180" height="30">
+    <a class="header__brand" href="../../" aria-label="СоюзГеоСтаб - на главную">
+      <img class="header__logo" src="../../assets/img/logo-dark.svg" alt="СоюзГеоСтаб" width="180" height="30">
     </a>
     <nav class="nav" aria-label="Основная навигация">
       <ul style="display:flex;align-items:center;gap:.25rem">
@@ -84,10 +83,11 @@
         <li class="nav__item"><a class="nav__link" href="../../kontakty/">Контакты</a></li>
       </ul>
     </nav>
+    <a class="header__phone" href="tel:+77476791767">+7 (747) 679-17-67</a>
     <div class="header__cta">
       <a class="btn btn--primary" href="../../kontakty/#zayavka">Оценить объект</a>
     </div>
-    <button class="burger" type="button" aria-expanded="false" aria-controls="mobile-nav" aria-label="Меню">
+    <button class="burger" type="button" aria-expanded="false" aria-controls="mobile-nav" aria-label="Открыть меню">
       <span></span><span></span><span></span>
     </button>
   </div>
@@ -153,8 +153,13 @@
   </nav>
 </div>
 
-<section class="page-head">
+<section class="page-head page-head--media">
   <div class="wrap">
+    <div class="page-head__media"><img src="../../assets/img/tonnel-rabota-v-vyrabotke-800.webp"
+      srcset="/assets/img/tonnel-rabota-v-vyrabotke-800.webp 800w, /assets/img/tonnel-rabota-v-vyrabotke-1600.webp 1600w"
+      sizes="100vw"
+      alt="Работы в тоннеле"
+      loading="eager" decoding="async" fetchpriority="high"></div>
     <p class="eyebrow">Отрасль</p>
     <h1 class="h1 page-head__title">Подземные сооружения</h1>
     <p class="lead">Работы внутри подземного пространства: герметизация водопритоков, укрепление массива и стабилизация тоннелей, шахтных стволов, камер и подземных выработок.</p>
@@ -165,7 +170,7 @@
   </div>
 </section>
 
-<section class="section">
+<section class="section section--light">
   <div class="wrap">
     <div class="split">
       <div>
@@ -215,17 +220,17 @@
   </div>
 </section>
 
-<section class="section">
+<section class="section section--light">
   <div class="wrap">
     <div class="split">
       <div>
         <p class="eyebrow">Условия</p>
         <h2 class="h2">Что учитываем под землёй</h2>
-        <p class="prose muted" style="margin-top:1.25rem">Технология — только половина решения. Вторая определяется режимом эксплуатации объекта и требованиями безопасности.</p>
+        <p class="prose muted" style="margin-top:1.25rem">Технология - только половина решения. Вторая определяется режимом эксплуатации объекта и требованиями безопасности.</p>
       </div>
       <div>
         <ul class="facts">
-    <li>Односторонний доступ — работы только изнутри сооружения</li>
+    <li>Односторонний доступ - работы только изнутри сооружения</li>
     <li>Ограниченный габарит: оборудование подбирается по фактическому сечению</li>
     <li>Требования промышленной безопасности, вентиляция, наряд-допуск</li>
     <li>Работа в технологические окна при действующем движении или добыче</li>
@@ -243,29 +248,58 @@
     <div style="margin-top:2.5rem">
       <div class="grid grid--4">
     <article class="card reveal">
-      <h3 class="card__title">Устранение водопритоков и инъекционная гидроизоляция</h3>
-      <p class="card__text">Останавливаем воду там, где она уже течёт. Инъекционная герметизация работает по активному притоку и под напором — не требует осушения участка, доступа снаружи и вскрытия конструкции.</p>
-      <span class="card__meta">Услуга</span>
+      <div class="card__media"><img src="../../assets/img/shema-otsechka-vodopritoka-800.webp"
+      srcset="/assets/img/shema-otsechka-vodopritoka-800.webp 800w, /assets/img/shema-otsechka-vodopritoka-1600.webp 1600w"
+      sizes="(max-width: 620px) 100vw, (max-width: 980px) 50vw, 33vw"
+      alt="Схема отсечки водопритока инъекционной завесой"
+      loading="lazy" decoding="async"></div>
+      <div class="card__body">
+        <h3 class="card__title">Устранение водопритоков и инъекционная гидроизоляция</h3>
+        <p class="card__text">Останавливаем воду там, где она уже течёт. Инъекционная герметизация работает по активному притоку и под напором - не требует осушения участка, доступа снаружи и вскрытия конструкции.</p>
+        <span class="card__meta">Услуга</span>
+      </div>
       <a class="card__link" href="../../uslugi/ustranenie-vodopritokov/"><span class="visually-hidden">Устранение водопритоков и инъекционная гидроизоляция</span></a>
     </article>
     <article class="card reveal">
-      <h3 class="card__title">Заполнение пустот и зон разуплотнения</h3>
-      <p class="card__text">Пустота под конструкцией — это нагрузка, которой некуда передаться. Заполняем полости, каверны и зоны разуплотнения, восстанавливая сплошность основания и контакт конструкции с ним.</p>
-      <span class="card__meta">Услуга</span>
+      <div class="card__media"><img src="../../assets/img/zapolnenie-pustoty-krupno-800.webp"
+      srcset="/assets/img/zapolnenie-pustoty-krupno-800.webp 800w, /assets/img/zapolnenie-pustoty-krupno-1600.webp 1600w"
+      sizes="(max-width: 620px) 100vw, (max-width: 980px) 50vw, 33vw"
+      alt="Заполнение пустоты под конструкцией"
+      loading="lazy" decoding="async"></div>
+      <div class="card__body">
+        <h3 class="card__title">Заполнение пустот и зон разуплотнения</h3>
+        <p class="card__text">Пустота под конструкцией - это нагрузка, которой некуда передаться. Заполняем полости, каверны и зоны разуплотнения, восстанавливая сплошность основания и контакт конструкции с ним.</p>
+        <span class="card__meta">Услуга</span>
+      </div>
       <a class="card__link" href="../../uslugi/zapolnenie-pustot/"><span class="visually-hidden">Заполнение пустот и зон разуплотнения</span></a>
     </article>
     <article class="card reveal">
-      <h3 class="card__title">Аварийные геотехнические работы</h3>
-      <p class="card__text">Когда счёт идёт на часы. Локализуем аварийный процесс, останавливаем его развитие и приводим объект в состояние, при котором можно спокойно готовить капитальное решение.</p>
-      <span class="card__meta">Услуга</span>
+      <div class="card__media"><img src="../../assets/img/tonnel-remont-obdelki-800.webp"
+      srcset="/assets/img/tonnel-remont-obdelki-800.webp 800w, /assets/img/tonnel-remont-obdelki-1600.webp 1600w"
+      sizes="(max-width: 620px) 100vw, (max-width: 980px) 50vw, 33vw"
+      alt="Аварийные работы в подземной выработке"
+      loading="lazy" decoding="async"></div>
+      <div class="card__body">
+        <h3 class="card__title">Аварийные геотехнические работы</h3>
+        <p class="card__text">Когда счёт идёт на часы. Локализуем аварийный процесс, останавливаем его развитие и приводим объект в состояние, при котором можно спокойно готовить капитальное решение.</p>
+        <span class="card__meta">Услуга</span>
+      </div>
       <a class="card__link" href="../../uslugi/avarijnye-raboty/"><span class="visually-hidden">Аварийные геотехнические работы</span></a>
     </article>
     <article class="card reveal">
-      <h3 class="card__title">Стабилизация слабых и водонасыщенных грунтов</h3>
-      <p class="card__text">Делаем слабое основание рабочим. Повышаем несущую способность и снижаем деформативность грунта на месте — без выемки, замены и устройства нового основания.</p>
-      <span class="card__meta">Услуга</span>
+      <div class="card__media"><img src="../../assets/img/shema-jet-grouting-kolonna-800.webp"
+      srcset="/assets/img/shema-jet-grouting-kolonna-800.webp 800w, /assets/img/shema-jet-grouting-kolonna-1600.webp 1600w"
+      sizes="(max-width: 620px) 100vw, (max-width: 980px) 50vw, 33vw"
+      alt="Грунтоцементная колонна в разрезе основания"
+      loading="lazy" decoding="async"></div>
+      <div class="card__body">
+        <h3 class="card__title">Стабилизация слабых и водонасыщенных грунтов</h3>
+        <p class="card__text">Делаем слабое основание рабочим. Повышаем несущую способность и снижаем деформативность грунта на месте - без выемки, замены и устройства нового основания.</p>
+        <span class="card__meta">Услуга</span>
+      </div>
       <a class="card__link" href="../../uslugi/stabilizaciya-slabyh-gruntov/"><span class="visually-hidden">Стабилизация слабых и водонасыщенных грунтов</span></a>
     </article>
+    
   </div>
     </div>
 
@@ -286,10 +320,10 @@
     <div class="split">
       <div>
         <p class="eyebrow">Оценка объекта</p>
-        <h2 class="h2">Опишите задачу — скажем, что с ней делать</h2>
+        <h2 class="h2">Опишите задачу - скажем, что с ней делать</h2>
         <div class="prose" style="margin-top:1.5rem">
           <p>Направьте описание проблемы, фото, материалы обследований, данные по геологии, водопритокам, осадкам, кренам или деформациям. Мы предварительно оценим задачу и предложим инженерное решение.</p>
-          <p>Также можно заказать выезд специалиста на объект — для обследования, инструментальной диагностики и подготовки рекомендаций по устранению проблемы.</p>
+          <p>Также можно заказать выезд специалиста на объект - для обследования, инструментальной диагностики и подготовки рекомендаций по устранению проблемы.</p>
         </div>
         <div class="btn-row">
           <a class="btn btn--ghost" href="tel:+77476791767">+7 (747) 679-17-67</a>
@@ -335,7 +369,7 @@
         <a class="btn btn--wa" href="https://wa.me/77476791767" rel="noopener">Написать в WhatsApp</a>
       </div>
 
-      <p class="form__note">Нажимая кнопку, вы соглашаетесь на обработку персональных данных. Материалы по объекту можно прислать на <a href="mailto:souzgeostab@mail.ru">souzgeostab@mail.ru</a> — так мы ответим предметнее.</p>
+      <p class="form__note">Нажимая кнопку, вы соглашаетесь на обработку персональных данных. Материалы по объекту можно прислать на <a href="mailto:souzgeostab@mail.ru">souzgeostab@mail.ru</a> - так мы ответим предметнее.</p>
       <div class="form__status" role="status" aria-live="polite" hidden></div>
     </form>
       </div>

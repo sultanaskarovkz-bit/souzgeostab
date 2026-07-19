@@ -24,8 +24,7 @@
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Archivo:wght@600;700&family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500;600&display=swap">
-  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@600;700&family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500;600&display=swap">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap&subset=cyrillic,latin">
   <link rel="stylesheet" href="../assets/css/main.css">
 
   <script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Главная","item":"https://souyzgeostab.kz/"},{"@type":"ListItem","position":2,"name":"Отрасли","item":"https://souyzgeostab.kz/otrasli/"}]}</script>
@@ -35,8 +34,8 @@
 <a class="skip-link" href="#main">Перейти к содержанию</a>
 <header class="header">
   <div class="wrap header__inner">
-    <a class="header__brand" href="../" aria-label="СоюзГеоСтаб — на главную">
-      <img class="header__logo" src="../assets/img/logo.svg" alt="СоюзГеоСтаб" width="180" height="30">
+    <a class="header__brand" href="../" aria-label="СоюзГеоСтаб - на главную">
+      <img class="header__logo" src="../assets/img/logo-dark.svg" alt="СоюзГеоСтаб" width="180" height="30">
     </a>
     <nav class="nav" aria-label="Основная навигация">
       <ul style="display:flex;align-items:center;gap:.25rem">
@@ -83,10 +82,11 @@
         <li class="nav__item"><a class="nav__link" href="../kontakty/">Контакты</a></li>
       </ul>
     </nav>
+    <a class="header__phone" href="tel:+77476791767">+7 (747) 679-17-67</a>
     <div class="header__cta">
       <a class="btn btn--primary" href="../kontakty/#zayavka">Оценить объект</a>
     </div>
-    <button class="burger" type="button" aria-expanded="false" aria-controls="mobile-nav" aria-label="Меню">
+    <button class="burger" type="button" aria-expanded="false" aria-controls="mobile-nav" aria-label="Открыть меню">
       <span></span><span></span><span></span>
     </button>
   </div>
@@ -155,7 +155,7 @@
   <div class="wrap">
     <p class="eyebrow">Отрасли</p>
     <h1 class="h1 page-head__title">Где мы работаем</h1>
-    <p class="lead">Технология — только половина решения. Вторая половина определяется тем, можно ли остановить объект, есть ли подъезд к участку, какие действуют требования промышленной безопасности и сколько времени реально отведено на работы. Решения адаптируются под режим эксплуатации, доступность участка и допустимые сроки.</p>
+    <p class="lead">Технология - только половина решения. Вторая половина определяется тем, можно ли остановить объект, есть ли подъезд к участку, какие действуют требования промышленной безопасности и сколько времени реально отведено на работы. Решения адаптируются под режим эксплуатации, доступность участка и допустимые сроки.</p>
   </div>
 </section>
 
@@ -163,55 +163,112 @@
   <div class="wrap">
     <div class="grid grid--4">
     <article class="card reveal">
-      <h3 class="card__title">Горнодобывающая отрасль</h3>
-      <p class="card__text">Комплекс инъекционных и анкерных решений для укрепления и стабилизации горного массива, восстановления несущей способности и предотвращения обрушений.</p>
-      <span class="card__meta">Подробнее</span>
+      <div class="card__media"><img src="../assets/img/shahta-gornaya-vyrabotka-800.webp"
+      srcset="/assets/img/shahta-gornaya-vyrabotka-800.webp 800w, /assets/img/shahta-gornaya-vyrabotka-1600.webp 1600w"
+      sizes="(max-width: 620px) 100vw, (max-width: 980px) 50vw, 33vw"
+      alt="Горная выработка шахты"
+      loading="lazy" decoding="async"></div>
+      <div class="card__body">
+        <h3 class="card__title">Горнодобывающая отрасль</h3>
+        <p class="card__text">Комплекс инъекционных и анкерных решений для укрепления и стабилизации горного массива, восстановления несущей способности и предотвращения обрушений.</p>
+        <span class="card__meta">Подробнее</span>
+      </div>
       <a class="card__link" href="../otrasli/gornodobyvayushchaya/"><span class="visually-hidden">Горнодобывающая отрасль</span></a>
     </article>
     <article class="card reveal">
-      <h3 class="card__title">Строительная отрасль</h3>
-      <p class="card__text">Комплексные инъекционные и полимерные технологии для укрепления грунтов и оснований, выравнивания конструкций, ликвидации пустот и просадок, герметизации коммуникаций и защиты объектов от проникновения влаги.</p>
-      <span class="card__meta">Подробнее</span>
+      <div class="card__media"><img src="../assets/img/zhilaya-zastrojka-800.webp"
+      srcset="/assets/img/zhilaya-zastrojka-800.webp 800w, /assets/img/zhilaya-zastrojka-1600.webp 1600w"
+      sizes="(max-width: 620px) 100vw, (max-width: 980px) 50vw, 33vw"
+      alt="Жилая застройка"
+      loading="lazy" decoding="async"></div>
+      <div class="card__body">
+        <h3 class="card__title">Строительная отрасль</h3>
+        <p class="card__text">Комплексные инъекционные и полимерные технологии для укрепления грунтов и оснований, выравнивания конструкций, ликвидации пустот и просадок, герметизации коммуникаций и защиты объектов от проникновения влаги.</p>
+        <span class="card__meta">Подробнее</span>
+      </div>
       <a class="card__link" href="../otrasli/stroitelnaya/"><span class="visually-hidden">Строительная отрасль</span></a>
     </article>
     <article class="card reveal">
-      <h3 class="card__title">Транспортная инфраструктура</h3>
-      <p class="card__text">Комплексные инъекционно-восстановительные решения по подъёму и стабилизации оснований, выравниванию автодорожных одежд и железнодорожных конструкций, взлётно-посадочных полос и рулёжных дорожек, восстановление их геометрии и эксплуатационной надёжности.</p>
-      <span class="card__meta">Подробнее</span>
+      <div class="card__media"><img src="../assets/img/otrasl-transportnaya-800.webp"
+      srcset="/assets/img/otrasl-transportnaya-800.webp 800w, /assets/img/otrasl-transportnaya-1600.webp 1600w"
+      sizes="(max-width: 620px) 100vw, (max-width: 980px) 50vw, 33vw"
+      alt="Автодорога, железная дорога и взлётно-посадочная полоса"
+      loading="lazy" decoding="async"></div>
+      <div class="card__body">
+        <h3 class="card__title">Транспортная инфраструктура</h3>
+        <p class="card__text">Комплексные инъекционно-восстановительные решения по подъёму и стабилизации оснований, выравниванию автодорожных одежд и железнодорожных конструкций, взлётно-посадочных полос и рулёжных дорожек, восстановление их геометрии и эксплуатационной надёжности.</p>
+        <span class="card__meta">Подробнее</span>
+      </div>
       <a class="card__link" href="../otrasli/transportnaya/"><span class="visually-hidden">Транспортная инфраструктура</span></a>
     </article>
     <article class="card reveal">
-      <h3 class="card__title">Гидротехническая инфраструктура</h3>
-      <p class="card__text">Обеспечиваем герметизацию, укрепление и стабилизацию гидротехнических сооружений с применением современных технологий, без масштабных земляных работ и остановки эксплуатации.</p>
-      <span class="card__meta">Подробнее</span>
+      <div class="card__media"><img src="../assets/img/gts-plotina-panorama-800.webp"
+      srcset="/assets/img/gts-plotina-panorama-800.webp 800w, /assets/img/gts-plotina-panorama-1600.webp 1600w"
+      sizes="(max-width: 620px) 100vw, (max-width: 980px) 50vw, 33vw"
+      alt="Гидротехническое сооружение"
+      loading="lazy" decoding="async"></div>
+      <div class="card__body">
+        <h3 class="card__title">Гидротехническая инфраструктура</h3>
+        <p class="card__text">Обеспечиваем герметизацию, укрепление и стабилизацию гидротехнических сооружений с применением современных технологий, без масштабных земляных работ и остановки эксплуатации.</p>
+        <span class="card__meta">Подробнее</span>
+      </div>
       <a class="card__link" href="../otrasli/gidrotehnicheskaya/"><span class="visually-hidden">Гидротехническая инфраструктура</span></a>
     </article>
     <article class="card reveal">
-      <h3 class="card__title">Топливно-энергетическая инфраструктура</h3>
-      <p class="card__text">Реализуем инженерные решения для объектов ТЭК с применением современных геотехнических технологий, исключающих масштабные земляные работы и остановку технологических процессов. Собственное специализированное оборудование обеспечивает стабильную и безопасную эксплуатацию сооружений.</p>
-      <span class="card__meta">Подробнее</span>
+      <div class="card__media"><img src="../assets/img/obekt-tek-doroga-800.webp"
+      srcset="/assets/img/obekt-tek-doroga-800.webp 800w, /assets/img/obekt-tek-doroga-1600.webp 1600w"
+      sizes="(max-width: 620px) 100vw, (max-width: 980px) 50vw, 33vw"
+      alt="Объект топливно-энергетического комплекса"
+      loading="lazy" decoding="async"></div>
+      <div class="card__body">
+        <h3 class="card__title">Топливно-энергетическая инфраструктура</h3>
+        <p class="card__text">Реализуем инженерные решения для объектов ТЭК с применением современных геотехнических технологий, исключающих масштабные земляные работы и остановку технологических процессов. Собственное специализированное оборудование обеспечивает стабильную и безопасную эксплуатацию сооружений.</p>
+        <span class="card__meta">Подробнее</span>
+      </div>
       <a class="card__link" href="../otrasli/toplivno-energeticheskaya/"><span class="visually-hidden">Топливно-энергетическая инфраструктура</span></a>
     </article>
     <article class="card reveal">
-      <h3 class="card__title">Промышленные объекты</h3>
-      <p class="card__text">Стабилизация оснований, заполнение пустот, герметизация водопритоков и восстановление эксплуатационной надёжности сооружений — без остановки производства.</p>
-      <span class="card__meta">Подробнее</span>
+      <div class="card__media"><img src="../assets/img/promyshlennyj-obekt-rabota-800.webp"
+      srcset="/assets/img/promyshlennyj-obekt-rabota-800.webp 800w, /assets/img/promyshlennyj-obekt-rabota-1600.webp 1600w"
+      sizes="(max-width: 620px) 100vw, (max-width: 980px) 50vw, 33vw"
+      alt="Работы на промышленном объекте"
+      loading="lazy" decoding="async"></div>
+      <div class="card__body">
+        <h3 class="card__title">Промышленные объекты</h3>
+        <p class="card__text">Стабилизация оснований, заполнение пустот, герметизация водопритоков и восстановление эксплуатационной надёжности сооружений - без остановки производства.</p>
+        <span class="card__meta">Подробнее</span>
+      </div>
       <a class="card__link" href="../otrasli/promyshlennye-obekty/"><span class="visually-hidden">Промышленные объекты</span></a>
     </article>
     <article class="card reveal">
-      <h3 class="card__title">Подземные сооружения</h3>
-      <p class="card__text">Работы внутри подземного пространства: герметизация водопритоков, укрепление массива и стабилизация тоннелей, шахтных стволов, камер и подземных выработок.</p>
-      <span class="card__meta">Подробнее</span>
+      <div class="card__media"><img src="../assets/img/tonnel-rabota-v-vyrabotke-800.webp"
+      srcset="/assets/img/tonnel-rabota-v-vyrabotke-800.webp 800w, /assets/img/tonnel-rabota-v-vyrabotke-1600.webp 1600w"
+      sizes="(max-width: 620px) 100vw, (max-width: 980px) 50vw, 33vw"
+      alt="Работы в тоннеле"
+      loading="lazy" decoding="async"></div>
+      <div class="card__body">
+        <h3 class="card__title">Подземные сооружения</h3>
+        <p class="card__text">Работы внутри подземного пространства: герметизация водопритоков, укрепление массива и стабилизация тоннелей, шахтных стволов, камер и подземных выработок.</p>
+        <span class="card__meta">Подробнее</span>
+      </div>
       <a class="card__link" href="../otrasli/podzemnye-sooruzheniya/"><span class="visually-hidden">Подземные сооружения</span></a>
     </article>
     <article class="card reveal">
-      <h3 class="card__title">Инженерная инфраструктура</h3>
-      <p class="card__text">Наружные сети и объекты инфраструктуры. Стабилизация оснований и защита инженерных сетей, коммуникаций, резервуаров и технологических площадок.</p>
-      <span class="card__meta">Подробнее</span>
+      <div class="card__media"><img src="../assets/img/inzhenernye-seti-kolodec-800.webp"
+      srcset="/assets/img/inzhenernye-seti-kolodec-800.webp 800w, /assets/img/inzhenernye-seti-kolodec-1600.webp 1600w"
+      sizes="(max-width: 620px) 100vw, (max-width: 980px) 50vw, 33vw"
+      alt="Инженерные сети и колодец"
+      loading="lazy" decoding="async"></div>
+      <div class="card__body">
+        <h3 class="card__title">Инженерная инфраструктура</h3>
+        <p class="card__text">Наружные сети и объекты инфраструктуры. Стабилизация оснований и защита инженерных сетей, коммуникаций, резервуаров и технологических площадок.</p>
+        <span class="card__meta">Подробнее</span>
+      </div>
       <a class="card__link" href="../otrasli/inzhenernaya-infrastruktura/"><span class="visually-hidden">Инженерная инфраструктура</span></a>
     </article>
+    
   </div>
-    <p class="lead muted" style="margin-top:3rem">Работаем по Казахстану. Если ваш объект не попадает ни в одну из категорий — опишите задачу, разберёмся: тип сооружения важен, но определяющим является характер дефекта.</p>
+    <p class="lead muted" style="margin-top:2.5rem">Работаем по Казахстану. Если ваш объект не попадает ни в одну из категорий - опишите задачу, разберёмся: тип сооружения важен, но определяющим является характер дефекта.</p>
   </div>
 </section>
 
@@ -220,10 +277,10 @@
     <div class="split">
       <div>
         <p class="eyebrow">Оценка объекта</p>
-        <h2 class="h2">Опишите задачу — скажем, что с ней делать</h2>
+        <h2 class="h2">Опишите задачу - скажем, что с ней делать</h2>
         <div class="prose" style="margin-top:1.5rem">
           <p>Направьте описание проблемы, фото, материалы обследований, данные по геологии, водопритокам, осадкам, кренам или деформациям. Мы предварительно оценим задачу и предложим инженерное решение.</p>
-          <p>Также можно заказать выезд специалиста на объект — для обследования, инструментальной диагностики и подготовки рекомендаций по устранению проблемы.</p>
+          <p>Также можно заказать выезд специалиста на объект - для обследования, инструментальной диагностики и подготовки рекомендаций по устранению проблемы.</p>
         </div>
         <div class="btn-row">
           <a class="btn btn--ghost" href="tel:+77476791767">+7 (747) 679-17-67</a>
@@ -269,7 +326,7 @@
         <a class="btn btn--wa" href="https://wa.me/77476791767" rel="noopener">Написать в WhatsApp</a>
       </div>
 
-      <p class="form__note">Нажимая кнопку, вы соглашаетесь на обработку персональных данных. Материалы по объекту можно прислать на <a href="mailto:souzgeostab@mail.ru">souzgeostab@mail.ru</a> — так мы ответим предметнее.</p>
+      <p class="form__note">Нажимая кнопку, вы соглашаетесь на обработку персональных данных. Материалы по объекту можно прислать на <a href="mailto:souzgeostab@mail.ru">souzgeostab@mail.ru</a> - так мы ответим предметнее.</p>
       <div class="form__status" role="status" aria-live="polite" hidden></div>
     </form>
       </div>

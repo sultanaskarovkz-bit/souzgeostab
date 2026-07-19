@@ -13,9 +13,68 @@ import { otrasli, otrasliIntro } from './content/otrasli.mjs';
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), '..');
 
 /* --- Помощники ---------------------------------------------------------- */
+/* Длинные и средние тире приводим к обычному дефису: в вёрстке под Manrope
+   они выглядели чужеродно и рвали строку. */
 const esc = (s = '') => String(s)
+  .replace(/[—–]/g, '-')
   .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
   .replace(/"/g, '&quot;');
+
+/* --- Фотографии ---------------------------------------------------------
+   Соответствие снято по контактному листу: каждой странице свой кадр,
+   по возможности с реальных объектов и в фирменной форме.               */
+const PHOTO = {
+  hero:    { file: 'inekciya-osnovaniya-dvoe',   alt: 'Специалисты СоюзГеоСтаб выполняют инъекционное закрепление основания' },
+  process: { file: 'shema-podem-plity-etapy',    alt: 'Схема этапов подъёма плиты инъекционным методом' },
+  company: { file: 'brigada-zamery-na-obekte',   alt: 'Бригада СоюзГеоСтаб выполняет замеры на объекте' },
+  team:    { file: 'brigada-na-obekte',          alt: 'Специалисты СоюзГеоСтаб на объекте' },
+  stages:  { file: 'geodeziya-brigada-doroga',   alt: 'Геодезический контроль отметок на дорожном покрытии' },
+  docs:    { file: 'geofizika-inzhener-planshet', alt: 'Инженер с данными обследования объекта' },
+  cases:   { file: 'burovaya-ustanovka-jet-grouting', alt: 'Буровая установка на объекте' },
+  contact: { file: 'inekciya-fundamenta-brigada', alt: 'Инъекционное усиление фундамента' },
+
+  uslugi: {
+    'usilenie-fundamentov':        { file: 'inekciya-fundamenta-krupno',  alt: 'Инъекционное усиление фундамента здания' },
+    'podyem-plit-i-polov':         { file: 'podem-pola-sklad',            alt: 'Подъём промышленного пола склада инъекционным методом' },
+    'ustranenie-vodopritokov':     { file: 'shema-otsechka-vodopritoka',  alt: 'Схема отсечки водопритока инъекционной завесой' },
+    'zapolnenie-pustot':           { file: 'zapolnenie-pustoty-krupno',   alt: 'Заполнение пустоты под конструкцией' },
+    'stabilizaciya-slabyh-gruntov':{ file: 'shema-jet-grouting-kolonna',  alt: 'Грунтоцементная колонна в разрезе основания' },
+    'vodoponizhenie':              { file: 'vodoponizhenie-kotlovan',     alt: 'Водопонижение в котловане' },
+    'avarijnye-raboty':            { file: 'tonnel-remont-obdelki',       alt: 'Аварийные работы в подземной выработке' }
+  },
+
+  tehnologii: {
+    'jet-grouting':          { file: 'burovaya-ustanovka-jet-grouting', alt: 'Буровая установка Jet Grouting на объекте' },
+    'deep-stabilization':    { file: 'shema-deep-stabilization',        alt: 'Разрез: зона закрепления грунта при глубинной стабилизации' },
+    'floor-lifting':         { file: 'shema-podem-plity',               alt: 'Разрез: подъём плиты инъекционным составом' },
+    'leak-sealing':          { file: 'inekciya-v-osnovanie-krupno',     alt: 'Инъекционная герметизация конструкции' },
+    'void-filling':          { file: 'inekcionnye-pakery-v-betone',     alt: 'Инъекционные пакеры, установленные в бетон' },
+    'dewatering':            { file: 'vodoponizhenie-kotlovan',         alt: 'Система водопонижения на объекте' },
+    'geofizicheskiy-kontrol':{ file: 'geofizika-inzhener-planshet',     alt: 'Геофизическое обследование объекта' }
+  },
+
+  otrasli: {
+    'gornodobyvayushchaya':     { file: 'shahta-gornaya-vyrabotka',   alt: 'Горная выработка шахты' },
+    'stroitelnaya':             { file: 'zhilaya-zastrojka',          alt: 'Жилая застройка' },
+    'transportnaya':            { file: 'otrasl-transportnaya',       alt: 'Автодорога, железная дорога и взлётно-посадочная полоса' },
+    'gidrotehnicheskaya':       { file: 'gts-plotina-panorama',       alt: 'Гидротехническое сооружение' },
+    'toplivno-energeticheskaya':{ file: 'obekt-tek-doroga',           alt: 'Объект топливно-энергетического комплекса' },
+    'promyshlennye-obekty':     { file: 'promyshlennyj-obekt-rabota', alt: 'Работы на промышленном объекте' },
+    'podzemnye-sooruzheniya':   { file: 'tonnel-rabota-v-vyrabotke',  alt: 'Работы в тоннеле' },
+    'inzhenernaya-infrastruktura':{ file: 'inzhenernye-seti-kolodec', alt: 'Инженерные сети и колодец' }
+  }
+};
+
+/* Адаптивная картинка: браузер сам берёт нужную ширину и не тянет
+   1600px на телефон. */
+function picture(photo, { cls = '', ratio = '', eager = false } = {}) {
+  if (!photo) return '';
+  return `<img src="/assets/img/${photo.file}-800.webp"
+      srcset="/assets/img/${photo.file}-800.webp 800w, /assets/img/${photo.file}-1600.webp 1600w"
+      sizes="${ratio || '(max-width: 620px) 100vw, (max-width: 980px) 50vw, 33vw'}"
+      alt="${esc(photo.alt)}"${cls ? ` class="${cls}"` : ''}
+      loading="${eager ? 'eager' : 'lazy'}" decoding="async"${eager ? ' fetchpriority="high"' : ''}>`;
+}
 
 const byslug = (list) => Object.fromEntries(list.map((x) => [x.slug, x]));
 const U = byslug(uslugi), T = byslug(tehnologii), O = byslug(otrasli);
@@ -107,6 +166,10 @@ function serviceSchema(p, path) {
    и базой для относительных путей станет несуществующая папка. Там
    пути обязаны остаться абсолютными. */
 function relativize(html, path, absolute) {
+  // Длинные и средние тире меняем на обычный дефис на выходе, а не в esc():
+  // часть текста написана прямо в шаблонах и через экранирование не проходит.
+  html = html.replace(/[—–]/g, '-');
+
   if (absolute) return html;
 
   const parts = path.split('/').filter(Boolean);
@@ -159,8 +222,7 @@ function layout({ title, desc, path, schemas = [], body, crumbs, absolute }) {
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Archivo:wght@600;700&family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500;600&display=swap">
-  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@600;700&family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500;600&display=swap">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap&subset=cyrillic,latin">
   <link rel="stylesheet" href="/assets/css/main.css">
 
   ${ld}
@@ -205,17 +267,18 @@ function header(path) {
   return `<header class="header">
   <div class="wrap header__inner">
     <a class="header__brand" href="/" aria-label="${esc(site.name)} — на главную">
-      <img class="header__logo" src="/assets/img/logo.svg" alt="${esc(site.name)}" width="180" height="30">
+      <img class="header__logo" src="/assets/img/logo-dark.svg" alt="${esc(site.name)}" width="180" height="30">
     </a>
     <nav class="nav" aria-label="Основная навигация">
       <ul style="display:flex;align-items:center;gap:.25rem">
         ${links}
       </ul>
     </nav>
+    <a class="header__phone" href="${site.phoneHref}">${esc(site.phone)}</a>
     <div class="header__cta">
       <a class="btn btn--primary" href="/kontakty/#zayavka">Оценить объект</a>
     </div>
-    <button class="burger" type="button" aria-expanded="false" aria-controls="mobile-nav" aria-label="Меню">
+    <button class="burger" type="button" aria-expanded="false" aria-controls="mobile-nav" aria-label="Открыть меню">
       <span></span><span></span><span></span>
     </button>
   </div>
@@ -381,14 +444,31 @@ function ctaSection() {
 }
 
 /* --- Карточки ----------------------------------------------------------- */
-function cardsGrid(items, cols = 3) {
+/* Карточка-призыв. Ставится последней, чтобы 7 услуг в сетке из 4 колонок
+   не оставляли пустую ячейку. */
+function ctaCard(text) {
+  return `<article class="card card--cta reveal">
+      <div class="card__body">
+        <h3 class="card__title">Не нашли свою задачу?</h3>
+        <p class="card__text">${esc(text)}</p>
+        <span class="card__meta">Описать объект</span>
+      </div>
+      <a class="card__link" href="/kontakty/#zayavka"><span class="visually-hidden">Описать объект</span></a>
+    </article>`;
+}
+
+function cardsGrid(items, cols = 3, cta) {
   return `<div class="grid grid--${cols}">
     ${items.map((i) => `<article class="card reveal">
-      <h3 class="card__title">${esc(i.title)}</h3>
-      <p class="card__text">${esc(i.text)}</p>
-      <span class="card__meta">${esc(i.meta || 'Подробнее')}</span>
+      ${i.photo ? `<div class="card__media">${picture(i.photo)}</div>` : ''}
+      <div class="card__body">
+        <h3 class="card__title">${esc(i.title)}</h3>
+        <p class="card__text">${esc(i.text)}</p>
+        <span class="card__meta">${esc(i.meta || 'Подробнее')}</span>
+      </div>
       <a class="card__link" href="${i.href}"><span class="visually-hidden">${esc(i.title)}</span></a>
     </article>`).join('\n    ')}
+    ${cta ? ctaCard(cta) : ''}
   </div>`;
 }
 
@@ -418,7 +498,7 @@ function specTable(title, rows) {
 }
 
 function faqBlock(faq) {
-  return `<section class="section section--tight">
+  return `<section class="section section--tight section--tint">
   <div class="wrap">
     <p class="eyebrow">Частые вопросы</p>
     <h2 class="h2">Что спрашивают чаще всего</h2>
@@ -453,70 +533,211 @@ function stepsBlock() {
   </ol>`;
 }
 
+/* ==========================================================================
+   Анимированный разрез: как работает инъекционная стабилизация.
+   Геометрия «корней» построена генератором, а не нарисована на глаз —
+   так ветвление выглядит естественно и повторяет реальные фото объектов.
+   ========================================================================== */
+
+/* Детерминированный псевдослучайный ряд: при пересборке картинка та же,
+   diff не шумит. */
+function rng(seed) {
+  let s = seed >>> 0;
+  return () => {
+    s = (s * 1664525 + 1013904223) >>> 0;
+    return s / 4294967296;
+  };
+}
+
+function rootCluster(cx, cy, seed, delayBase) {
+  const rand = rng(seed);
+  const paths = [];
+  const BRANCHES = 13;
+
+  for (let i = 0; i < BRANCHES; i++) {
+    // Веер вниз и в стороны: состав идёт по пути наименьшего сопротивления,
+    // вверх к плите его прижимает, поэтому сектор шире по горизонтали
+    const a = Math.PI * (0.06 + 0.88 * (i / (BRANCHES - 1))) + (rand() - 0.5) * 0.16;
+    const len = 52 + rand() * 76;
+
+    const ex = cx - Math.cos(a) * len;
+    const ey = cy + Math.sin(a) * len * 0.52;
+    const mx = cx - Math.cos(a) * len * 0.5 + (rand() - 0.5) * 26;
+    const my = cy + Math.sin(a) * len * 0.28 - 8 - rand() * 10;
+
+    const dist = Math.hypot(ex - cx, ey - cy);
+    const w = (1.9 + rand() * 1.7).toFixed(2);
+    const delay = (delayBase + 0.1 + rand() * 0.5).toFixed(2);
+
+    paths.push(
+      `<path class="inj-root" d="M${cx.toFixed(0)} ${cy.toFixed(0)} Q${mx.toFixed(0)} ${my.toFixed(0)} ${ex.toFixed(0)} ${ey.toFixed(0)}" ` +
+      `stroke-width="${w}" opacity="${(0.55 + rand() * 0.45).toFixed(2)}" ` +
+      `style="--len:${Math.round(dist * 1.5)};--delay:${delay}s"/>`
+    );
+
+    // Ответвление от середины основной ветки
+    if (rand() > 0.42) {
+      const bx = ex - Math.cos(a + 0.7) * len * 0.4;
+      const by = ey + Math.sin(a + 0.7) * len * 0.22;
+      const bdist = Math.hypot(bx - ex, by - ey);
+      paths.push(
+        `<path class="inj-root" d="M${ex.toFixed(0)} ${ey.toFixed(0)} Q${((ex + bx) / 2).toFixed(0)} ${(ey - 6).toFixed(0)} ${bx.toFixed(0)} ${by.toFixed(0)}" ` +
+        `stroke-width="1.3" opacity="0.5" ` +
+        `style="--len:${Math.round(bdist * 1.5)};--delay:${(Number(delay) + 0.45).toFixed(2)}s"/>`
+      );
+    }
+  }
+
+  return paths.join('\n        ');
+}
+
+function processSection() {
+  const POINTS = [
+    { x: 300, seed: 1207, delay: 0.9 },
+    { x: 600, seed: 4451, delay: 1.35 },
+    { x: 900, seed: 9013, delay: 1.8 }
+  ];
+
+  const SLAB_Y = 120, SLAB_H = 30, GROUND_Y = 150, TIP_Y = 248;
+
+  const H = 356;
+
+  const pipes = POINTS.map((p) =>
+    `<line class="inj-pipe" x1="${p.x}" y1="${SLAB_Y - 48}" x2="${p.x}" y2="${TIP_Y}" style="--delay:${(p.delay - 0.75).toFixed(2)}s"/>
+        <circle class="inj-glow" cx="${p.x}" cy="${SLAB_Y - 52}" r="7" fill="#c8d3de" style="--delay:${(p.delay - 0.75).toFixed(2)}s"/>`
+  ).join('\n        ');
+
+  const glows = POINTS.map((p) =>
+    `<ellipse class="inj-glow" cx="${p.x}" cy="${TIP_Y + 4}" rx="140" ry="54" fill="url(#injGlow)" style="--delay:${(p.delay + 0.5).toFixed(2)}s"/>`
+  ).join('\n        ');
+
+  const roots = POINTS.map((p) => rootCluster(p.x, TIP_Y, p.seed, p.delay)).join('\n        ');
+
+  const arrows = POINTS.map((p) =>
+    `<g class="lift-arrow"><path d="M${p.x} ${SLAB_Y - 66} l0 -30 M${p.x} ${SLAB_Y - 96} l-8 10 M${p.x} ${SLAB_Y - 96} l8 10"
+        stroke="#f2a900" stroke-width="3" fill="none" stroke-linecap="round" stroke-linejoin="round"/></g>`
+  ).join('\n        ');
+
+  // Слои породы: горизонтали с лёгким уклоном, как на реальном разрезе
+  const strata = Array.from({ length: 6 }, (_, i) => {
+    const y = GROUND_Y + 30 + i * 40;
+    return `<path d="M0 ${y} C 300 ${y - 7}, 900 ${y + 8}, 1200 ${y - 4}" stroke="rgba(255,255,255,.06)" stroke-width="1.5" fill="none"/>`;
+  }).join('\n        ');
+
+  return `<section class="process" aria-labelledby="process-title">
+  <div class="wrap" style="padding-top:var(--section-y);padding-bottom:clamp(1.5rem,3vw,2.5rem)">
+    <p class="eyebrow">Как это работает</p>
+    <h2 class="h2" id="process-title">Состав уходит в грунт, заполняет пустоту и поднимает конструкцию</h2>
+    <p class="lead muted" style="margin-top:1rem">Разрез основания под плитой. Схема повторяет реальную последовательность работ: бурение, подача состава, уплотнение, контролируемый подъём.</p>
+  </div>
+
+  <div class="process__figure" data-process>
+    <svg class="process__svg" viewBox="0 0 1200 ${H}" preserveAspectRatio="xMidYMid slice" role="img"
+         aria-label="Схема: инъекционный состав заполняет пустоты под плитой и поднимает её в проектное положение">
+      <defs>
+        <linearGradient id="groundGrad" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0%"   stop-color="#1e2c3a"/>
+          <stop offset="55%"  stop-color="#121e2a"/>
+          <stop offset="100%" stop-color="#070d14"/>
+        </linearGradient>
+        <linearGradient id="slabGrad" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0%"   stop-color="#e8eef4"/>
+          <stop offset="100%" stop-color="#a7b5c4"/>
+        </linearGradient>
+        <radialGradient id="injGlow">
+          <stop offset="0%"   stop-color="#f2a900" stop-opacity="0.40"/>
+          <stop offset="55%"  stop-color="#f2a900" stop-opacity="0.12"/>
+          <stop offset="100%" stop-color="#f2a900" stop-opacity="0"/>
+        </radialGradient>
+      </defs>
+
+      <rect x="0" y="${GROUND_Y}" width="1200" height="${H - GROUND_Y}" fill="url(#groundGrad)"/>
+      ${strata}
+
+      <!-- Пустоты и зоны разуплотнения до начала работ -->
+      <ellipse cx="330" cy="${GROUND_Y + 22}" rx="120" ry="19" fill="#04080d" opacity="0.8"/>
+      <ellipse cx="640" cy="${GROUND_Y + 17}" rx="150" ry="14" fill="#04080d" opacity="0.65"/>
+      <ellipse cx="905" cy="${GROUND_Y + 24}" rx="106" ry="20" fill="#04080d" opacity="0.75"/>
+
+      ${glows}
+      ${roots}
+
+      <g class="slab-lift">
+        <rect x="0" y="${SLAB_Y}" width="1200" height="${SLAB_H}" fill="url(#slabGrad)"/>
+        <rect x="0" y="${SLAB_Y}" width="1200" height="3" fill="#ffffff" opacity="0.6"/>
+        <line x1="410" y1="${SLAB_Y}" x2="410" y2="${SLAB_Y + SLAB_H}" stroke="#8d9aa8" stroke-width="2"/>
+        <line x1="800" y1="${SLAB_Y}" x2="800" y2="${SLAB_Y + SLAB_H}" stroke="#8d9aa8" stroke-width="2"/>
+      </g>
+
+      ${pipes}
+      ${arrows}
+    </svg>
+  </div>
+
+  <div class="process__steps">
+    <div class="process__step" data-step="0"><h3>1. Бурение</h3><p>Отверстия 18-22 мм по расчётной сетке. Конструкция не демонтируется.</p></div>
+    <div class="process__step" data-step="1"><h3>2. Подача состава</h3><p>Состав идёт по пути наименьшего сопротивления и заполняет пустоты.</p></div>
+    <div class="process__step" data-step="2"><h3>3. Уплотнение</h3><p>Расширяясь, состав уплотняет грунт и армирует основание.</p></div>
+    <div class="process__step" data-step="3"><h3>4. Подъём</h3><p>Плита выходит на проектную отметку под геодезическим контролем.</p></div>
+  </div>
+</section>`;
+}
+
 /* --- Главная ------------------------------------------------------------ */
 function homePage() {
-  const injections = [12, 26, 41, 58, 72, 86].map((x, i) =>
-    `<span class="injection" style="left:${x}%;height:${52 + (i % 3) * 16}%"></span>`).join('\n      ');
-
   const body = `
 <section class="hero">
-  <div class="wrap">
-    <p class="eyebrow hero__eyebrow">Инъекционные технологии и геотехнические решения</p>
+  <div class="hero__media">
+    ${picture(PHOTO.hero, { ratio: '100vw', eager: true })}
+  </div>
+  <div class="wrap hero__inner">
+    <p class="eyebrow">Инъекционные технологии и геотехнические решения</p>
     <h1 class="hero__title">Укрепляем основания. Поднимаем фундаменты. <em>Останавливаем воду.</em></h1>
-    <p class="hero__lead">Инженерная компания для горнодобывающей промышленности, строительства, инфраструктуры и гидротехнических сооружений. Подбираем технологию под фактическую проблему объекта — от слабого грунта и пустот до осадок фундаментов и деформаций сооружений.</p>
-    <div class="btn-row hero__actions">
+    <p class="hero__lead">Инженерная компания для горнодобывающей промышленности, строительства, инфраструктуры и гидротехнических сооружений. Подбираем технологию под фактическую проблему объекта: от слабого грунта и пустот до осадок фундаментов и деформаций сооружений.</p>
+    <div class="btn-row">
       <a class="btn btn--primary" href="/kontakty/#zayavka">Оценить объект</a>
       <a class="btn btn--ghost" href="/tehnologii/">Посмотреть технологии</a>
     </div>
-    <div class="datum">
-      <span class="datum__note">Поверхность</span>
-      <span class="datum__label">±0.000</span>
-    </div>
-  </div>
-  <div class="subsurface">
-    <div class="depth-scale" aria-hidden="true">
-      <span>−2.0</span><span>−8.0</span><span>−16.0</span><span>−30.0</span>
-    </div>
-    ${injections}
-    <div class="wrap subsurface__inner">
-      <div class="tech-chips">
-        ${tehnologii.map((t) => `<a class="tech-chip" href="/tehnologii/${t.slug}/">${esc(t.nav)}</a>`).join('\n        ')}
-      </div>
-    </div>
   </div>
 </section>
 
-<section class="section section--tight">
-  <div class="wrap">
-    <div class="metrics">
-      <div class="metric"><div class="metric__value">2 мм</div><p class="metric__label">точность выхода конструкции на проектную отметку</p></div>
-      <div class="metric"><div class="metric__value">15–30 мин</div><p class="metric__label">до возврата эксплуатационной нагрузки после инъекции</p></div>
-      <div class="metric"><div class="metric__value">30 м</div><p class="metric__label">глубина стабилизации основания</p></div>
-      <div class="metric"><div class="metric__value">0,1 мм</div><p class="metric__label">минимальное раскрытие герметизируемых трещин</p></div>
-    </div>
+<div class="wrap">
+  <div class="metrics">
+    <div class="metric"><div class="metric__value">2 мм</div><p class="metric__label">точность выхода конструкции на проектную отметку</p></div>
+    <div class="metric"><div class="metric__value">15-30 мин</div><p class="metric__label">до возврата эксплуатационной нагрузки</p></div>
+    <div class="metric"><div class="metric__value">30 м</div><p class="metric__label">глубина стабилизации основания</p></div>
+    <div class="metric"><div class="metric__value">0,1 мм</div><p class="metric__label">минимальное раскрытие герметизируемых трещин</p></div>
   </div>
-</section>
+</div>
 
-<section class="section">
+<section class="section section--light">
   <div class="wrap">
     <p class="eyebrow">Услуги</p>
     <h2 class="h2">Какие задачи мы решаем</h2>
-    <p class="lead" style="margin-top:1.25rem">Работаем с объектами, где нужен не косметический ремонт, а устранение причин деформаций, водопритоков и пустот — там, где традиционные методы оказываются неэффективными.</p>
-    <div style="margin-top:2.5rem">
-      ${cardsGrid(uslugi.map((u) => ({ title: u.h1, text: u.lead, href: `/uslugi/${u.slug}/` })), 3)}
+    <p class="lead" style="margin-top:1rem">Работаем с объектами, где нужен не косметический ремонт, а устранение причин деформаций, водопритоков и пустот: там, где традиционные методы оказываются неэффективными.</p>
+    <div style="margin-top:2.25rem">
+      ${cardsGrid(uslugi.map((u) => ({
+        title: u.h1, text: u.lead, href: `/uslugi/${u.slug}/`, photo: PHOTO.uslugi[u.slug]
+      })), 4, 'Опишите, что происходит на объекте: разберёмся и скажем, какая технология применима, а какая нет.')}
     </div>
   </div>
 </section>
 
-<section class="section section--deep">
+${processSection()}
+
+<section class="section section--light">
   <div class="wrap">
     <div class="split split--sticky">
       <div>
         <p class="eyebrow">Технологии</p>
         <h2 class="h2">Мы не продаём технологию</h2>
         <div class="prose" style="margin-top:1.5rem">
-          <p>Мы определяем причину возникновения дефекта и подбираем метод, который обеспечит результат с минимальными сроками, рисками и затратами — с учётом геологии, гидрогеологических условий, состояния конструкций и характера дефекта.</p>
+          <p>Мы определяем причину возникновения дефекта и подбираем метод, который обеспечит результат с минимальными сроками, рисками и затратами, с учётом геологии, гидрогеологических условий, состояния конструкций и характера дефекта.</p>
         </div>
+        <figure class="figure figure--wide" style="margin-top:2rem">
+          ${picture(PHOTO.tehnologii['jet-grouting'], { ratio: '(max-width: 900px) 100vw, 42vw' })}
+          <figcaption>Буровая установка Jet Grouting на объекте</figcaption>
+        </figure>
         <div class="btn-row"><a class="btn btn--ghost" href="/tehnologii/">Все технологии</a></div>
       </div>
       <div>
@@ -531,13 +752,16 @@ function homePage() {
     <p class="eyebrow">Отрасли</p>
     <h2 class="h2">Где мы работаем</h2>
     <p class="lead" style="margin-top:1.25rem">${esc(otrasliIntro.lead)}</p>
-    <div style="margin-top:2.5rem">
-      ${cardsGrid(otrasli.map((o) => ({ title: o.h1, text: o.lead, href: `/otrasli/${o.slug}/`, meta: 'Смотреть отрасль' })), 4)}
+    <div style="margin-top:2.25rem">
+      ${cardsGrid(otrasli.map((o) => ({
+        title: o.h1, text: o.lead, href: `/otrasli/${o.slug}/`,
+        meta: 'Смотреть отрасль', photo: PHOTO.otrasli[o.slug]
+      })), 4)}
     </div>
   </div>
 </section>
 
-<section class="section section--deep">
+<section class="section section--light">
   <div class="wrap">
     <div class="split">
       <div>
@@ -597,8 +821,10 @@ function hubPage({ intro, items, base, kind }) {
 
 <section class="section">
   <div class="wrap">
-    ${cardsGrid(items.map((i) => ({ title: i.h1, text: i.lead, href: `${base}${i.slug}/` })), kind === 'otrasli' ? 4 : 3)}
-    <p class="lead muted" style="margin-top:3rem">${esc(intro.outro)}</p>
+    ${cardsGrid(items.map((i) => ({
+      title: i.h1, text: i.lead, href: `${base}${i.slug}/`, photo: PHOTO[kind][i.slug]
+    })), 4, kind === 'otrasli' ? null : 'Опишите объект и что на нём происходит: скажем, применима ли наша технология к вашей задаче.')}
+    <p class="lead muted" style="margin-top:2.5rem">${esc(intro.outro)}</p>
   </div>
 </section>
 
@@ -616,8 +842,9 @@ function uslugaPage(p) {
   const crumbs = [{ title: 'Главная', href: '/' }, { title: 'Услуги', href: '/uslugi/' }, { title: p.nav, href: path }];
 
   const body = `
-<section class="page-head">
+<section class="page-head page-head--media">
   <div class="wrap">
+    <div class="page-head__media">${picture(PHOTO.uslugi[p.slug], { ratio: '100vw', eager: true })}</div>
     <p class="eyebrow">Услуга</p>
     <h1 class="h1 page-head__title">${esc(p.h1)}</h1>
     <p class="lead">${esc(p.lead)}</p>
@@ -628,7 +855,7 @@ function uslugaPage(p) {
   </div>
 </section>
 
-<section class="section">
+<section class="section section--light">
   <div class="wrap">
     <div class="split split--sticky">
       <div>
@@ -657,7 +884,7 @@ function uslugaPage(p) {
   </div>
 </section>
 
-<section class="section">
+<section class="section section--light">
   <div class="wrap">
     <div class="split">
       <div>
@@ -684,12 +911,12 @@ function uslugaPage(p) {
   </div>
 </section>
 
-<section class="section">
+<section class="section section--light">
   <div class="wrap">
     <p class="eyebrow">Чем решается</p>
     <h2 class="h2">Технологии для этой задачи</h2>
     <div style="margin-top:2.5rem">
-      ${cardsGrid(p.tech.map((s) => ({ title: T[s].h1, text: T[s].lead, href: `/tehnologii/${s}/`, meta: 'Технология' })), 3)}
+      ${cardsGrid(p.tech.map((s) => ({ title: T[s].h1, text: T[s].lead, href: `/tehnologii/${s}/`, meta: 'Технология', photo: PHOTO.tehnologii[s] })), 3)}
     </div>
 
     <h2 class="h2" style="margin-top:4rem">Отрасли, где это применяется</h2>
@@ -716,8 +943,9 @@ function tehPage(p) {
   const crumbs = [{ title: 'Главная', href: '/' }, { title: 'Технологии', href: '/tehnologii/' }, { title: p.nav, href: path }];
 
   const body = `
-<section class="page-head">
+<section class="page-head page-head--media">
   <div class="wrap">
+    <div class="page-head__media">${picture(PHOTO.tehnologii[p.slug], { ratio: '100vw', eager: true })}</div>
     <p class="eyebrow">Технология</p>
     <h1 class="h1 page-head__title">${esc(p.h1)}</h1>
     <p class="lead">${esc(p.lead)}</p>
@@ -728,7 +956,7 @@ function tehPage(p) {
   </div>
 </section>
 
-<section class="section">
+<section class="section section--light">
   <div class="wrap">
     <div class="split">
       <div>
@@ -755,7 +983,7 @@ function tehPage(p) {
   </div>
 </section>
 
-<section class="section">
+<section class="section section--light">
   <div class="wrap">
     <div class="split">
       <div>
@@ -782,7 +1010,7 @@ function tehPage(p) {
   </div>
 </section>
 
-<section class="section">
+<section class="section section--light">
   <div class="wrap">
     <div class="split">
       <div>
@@ -801,7 +1029,7 @@ function tehPage(p) {
     <p class="eyebrow">Связанные задачи</p>
     <h2 class="h2">Что решается этой технологией</h2>
     <div style="margin-top:2.5rem">
-      ${cardsGrid(p.uslugi.map((s) => ({ title: U[s].h1, text: U[s].lead, href: `/uslugi/${s}/`, meta: 'Услуга' })), 3)}
+      ${cardsGrid(p.uslugi.map((s) => ({ title: U[s].h1, text: U[s].lead, href: `/uslugi/${s}/`, meta: 'Услуга', photo: PHOTO.uslugi[s] })),3)}
     </div>
 
     <h2 class="h2" style="margin-top:4rem">Отрасли применения</h2>
@@ -828,8 +1056,9 @@ function otraslPage(p) {
   const crumbs = [{ title: 'Главная', href: '/' }, { title: 'Отрасли', href: '/otrasli/' }, { title: p.nav, href: path }];
 
   const body = `
-<section class="page-head">
+<section class="page-head page-head--media">
   <div class="wrap">
+    <div class="page-head__media">${picture(PHOTO.otrasli[p.slug], { ratio: '100vw', eager: true })}</div>
     <p class="eyebrow">Отрасль</p>
     <h1 class="h1 page-head__title">${esc(p.h1)}</h1>
     <p class="lead">${esc(p.lead)}</p>
@@ -840,7 +1069,7 @@ function otraslPage(p) {
   </div>
 </section>
 
-<section class="section">
+<section class="section section--light">
   <div class="wrap">
     <div class="split">
       <div>
@@ -867,7 +1096,7 @@ function otraslPage(p) {
   </div>
 </section>
 
-<section class="section">
+<section class="section section--light">
   <div class="wrap">
     <div class="split">
       <div>
@@ -887,7 +1116,7 @@ function otraslPage(p) {
     <p class="eyebrow">Услуги для отрасли</p>
     <h2 class="h2">С чем обращаются чаще всего</h2>
     <div style="margin-top:2.5rem">
-      ${cardsGrid(p.uslugi.map((s) => ({ title: U[s].h1, text: U[s].lead, href: `/uslugi/${s}/`, meta: 'Услуга' })), 4)}
+      ${cardsGrid(p.uslugi.map((s) => ({ title: U[s].h1, text: U[s].lead, href: `/uslugi/${s}/`, meta: 'Услуга', photo: PHOTO.uslugi[s] })),4)}
     </div>
 
     <h2 class="h2" style="margin-top:4rem">Применяемые технологии</h2>
@@ -912,8 +1141,9 @@ function etapyPage() {
   const path = '/etapy-raboty/';
   const crumbs = [{ title: 'Главная', href: '/' }, { title: 'Этапы работ', href: path }];
   const body = `
-<section class="page-head">
+<section class="page-head page-head--media">
   <div class="wrap">
+    <div class="page-head__media">${picture(PHOTO.stages, { ratio: '100vw', eager: true })}</div>
     <p class="eyebrow">Порядок работы</p>
     <h1 class="h1 page-head__title">Этапы работ</h1>
     <p class="lead">Последовательность от обследования объекта до отчёта и рекомендаций по дальнейшей эксплуатации. Она одинакова для здания, дороги, плотины и горной выработки — меняются методы, но не порядок.</p>
@@ -953,8 +1183,9 @@ function kejsyPage() {
   const path = '/kejsy/';
   const crumbs = [{ title: 'Главная', href: '/' }, { title: 'Кейсы', href: path }];
   const body = `
-<section class="page-head">
+<section class="page-head page-head--media">
   <div class="wrap">
+    <div class="page-head__media">${picture(PHOTO.cases, { ratio: '100vw', eager: true })}</div>
     <p class="eyebrow">Выполненные объекты</p>
     <h1 class="h1 page-head__title">Кейсы</h1>
     <p class="lead">Раздел заполняется. Здесь будут выполненные объекты с описанием задачи, применённой технологии, фактическими объёмами и подтверждённым результатом.</p>
@@ -1039,13 +1270,14 @@ function oKompaniiPage() {
   const body = `
 <section class="page-head">
   <div class="wrap">
+    <div class="page-head__media">${picture(PHOTO.team, { ratio: '100vw', eager: true })}</div>
     <p class="eyebrow">О компании</p>
     <h1 class="h1 page-head__title">${esc(site.legalName)}</h1>
     <p class="lead">Инженерная компания, специализирующаяся на инъекционных технологиях и геотехнических решениях для горнодобывающей промышленности, строительства, транспортной и гидротехнической инфраструктуры.</p>
   </div>
 </section>
 
-<section class="section">
+<section class="section section--light">
   <div class="wrap">
     <div class="split">
       <div>
@@ -1113,7 +1345,7 @@ function kontaktyPage() {
   </div>
 </section>
 
-<section class="section">
+<section class="section section--light">
   <div class="wrap">
     <div class="split">
       <div>

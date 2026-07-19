@@ -61,13 +61,59 @@
     reveals.forEach(function (el) { el.classList.add('is-in'); });
   }
 
-  /* --- Инъекционные колонны в герое ------------------------------------- */
-  // Позиции заданы в разметке через data-x, задержка считается здесь,
-  // чтобы колонны выходили последовательно, а не разом.
-  var columns = document.querySelectorAll('.injection');
-  columns.forEach(function (col, i) {
-    col.style.animationDelay = (0.9 + i * 0.12) + 's';
-  });
+  /* --- Схема процесса: запуск по появлению и цикл ------------------------ */
+  var figure = document.querySelector('[data-process]');
+  var steps = Array.prototype.slice.call(document.querySelectorAll('.process__step'));
+
+  if (figure) {
+    var CYCLE = 7600;                    // длительность полного проигрыша
+    // Момент, когда подсвечивается очередной шаг. Совпадает с задержками в CSS.
+    var MARKS = [150, 1200, 2600, 3400];
+    var timers = [];
+    var loop = null;
+    var calm = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+    var clear = function () {
+      timers.forEach(clearTimeout);
+      timers = [];
+    };
+
+    var play = function () {
+      clear();
+      figure.classList.remove('is-run');
+      void figure.offsetWidth;           // перезапуск CSS-анимаций
+      figure.classList.add('is-run');
+
+      steps.forEach(function (s) { s.setAttribute('data-on', 'false'); });
+      MARKS.forEach(function (t, i) {
+        timers.push(setTimeout(function () {
+          steps.forEach(function (s, j) { s.setAttribute('data-on', String(j <= i)); });
+        }, t));
+      });
+    };
+
+    if (calm) {
+      figure.classList.add('is-run');
+      steps.forEach(function (s) { s.setAttribute('data-on', 'true'); });
+    } else if ('IntersectionObserver' in window) {
+      var pio = new IntersectionObserver(function (entries) {
+        entries.forEach(function (entry) {
+          if (entry.isIntersecting) {
+            play();
+            if (!loop) loop = setInterval(play, CYCLE + 1600);
+          } else {
+            // За пределами экрана крутить незачем: это лишняя работа для батареи
+            clearInterval(loop);
+            loop = null;
+            clear();
+          }
+        });
+      }, { threshold: 0.35 });
+      pio.observe(figure);
+    } else {
+      play();
+    }
+  }
 
   /* --- Форма заявки ------------------------------------------------------ */
   var forms = document.querySelectorAll('form[data-lead-form]');
