@@ -98,8 +98,30 @@ function serviceSchema(p, path) {
   };
 }
 
+/* Все ссылки в шаблонах пишутся от корня («/uslugi/»), а на выходе
+   переводятся в относительные («../uslugi/»). Так страницы открываются
+   и с хостинга, и двойным кликом по файлу — последнее нужно, чтобы
+   показывать сайт заказчику без сервера.
+
+   Исключение — 404.html: Apache отдаёт его по произвольному адресу,
+   и базой для относительных путей станет несуществующая папка. Там
+   пути обязаны остаться абсолютными. */
+function relativize(html, path, absolute) {
+  if (absolute) return html;
+
+  const parts = path.split('/').filter(Boolean);
+  const depth = path.endsWith('/') ? parts.length : parts.length - 1;
+  const prefix = depth > 0 ? '../'.repeat(depth) : '';
+
+  return html
+    // Ссылка на главную: пустая строка сломала бы href
+    .replace(/(href|src)="\/"/g, `$1="${prefix || './'}"`)
+    // Всё остальное от корня, кроме //cdn и полных URL
+    .replace(/(href|src)="\/(?!\/)/g, `$1="${prefix}`);
+}
+
 /* --- Каркас документа --------------------------------------------------- */
-function layout({ title, desc, path, schemas = [], body, crumbs }) {
+function layout({ title, desc, path, schemas = [], body, crumbs, absolute }) {
   const canonical = site.domain + path;
   const ld = schemas.filter(Boolean)
     .map((s) => `<script type="application/ld+json">${JSON.stringify(s)}</script>`)
@@ -111,7 +133,7 @@ function layout({ title, desc, path, schemas = [], body, crumbs }) {
     site.metrika && `<script>window.YM_ID=${site.metrika};(function(m,e,t,r,i,k,a){m[i]=m[i]||function(){(m[i].a=m[i].a||[]).push(arguments)};m[i].l=1*new Date();k=e.createElement(t),a=e.getElementsByTagName(t)[0],k.async=1,k.src=r,a.parentNode.insertBefore(k,a)})(window,document,'script','https://mc.yandex.ru/metrika/tag.js','ym');ym(${site.metrika},'init',{webvisor:true,clickmap:true,trackLinks:true,accurateTrackBounce:true});</script>`
   ].filter(Boolean).join('\n  ');
 
-  return `<!DOCTYPE html>
+  const html = `<!DOCTYPE html>
 <html lang="ru">
 <head>
   <meta charset="utf-8">
@@ -158,6 +180,8 @@ ${waFloat()}
 </body>
 </html>
 `;
+
+  return relativize(html, path, absolute);
 }
 
 /* --- Шапка -------------------------------------------------------------- */
@@ -1163,7 +1187,7 @@ function notFoundPage() {
   return layout({
     title: 'Страница не найдена | СоюзГеоСтаб',
     desc: 'Страница не найдена. Перейдите в основные разделы сайта СоюзГеоСтаб.',
-    path: '/404.html', body
+    path: '/404.html', body, absolute: true
   });
 }
 
