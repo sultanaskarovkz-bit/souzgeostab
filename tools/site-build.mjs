@@ -285,6 +285,7 @@ async function buildHead(page, prefix) {
   // Приём заявок на свой обработчик вместо forms.tildacdn.com
   head += `\n<script>window.SGS_FORM_ENDPOINT="${prefix}form.php";</script>`;
   head += `\n<script src="${prefix}js/site-forms.js" charset="utf-8"></script>`;
+  head += `\n<script src="${prefix}js/site-cards.js" charset="utf-8" defer></script>`;
 
   return rebase(head, prefix);
 }
