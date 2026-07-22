@@ -1,0 +1,322 @@
+<div id="rec2423725763" class="r t-rec t-rec_pb_0" style="padding-bottom:0px; " data-record-type="1370"> <!-- T1370 --> <div class="t1370"> <!-- nominify begin --> <header class="nav-header"> <div class="nav-header__container"> <!-- Левая часть: логотип и название --> <div class="nav-header__left"> <div class="nav-header__logo-wrapper"> <img src="images/tild3863-3166-4566-a263-303734323136__-__resize__20x___2.png" alt="СоюзГеоСтаб" class="nav-header__logo-image t-img" data-original="images/tild3863-3166-4566-a263-303734323136___2.png"> </div> </div> <!-- Центральная часть: меню --> <nav class="nav-header__menu"> <a href="#rec2423665763" class="nav-header__menu-item" data-section="solutions">Решения</a> <a href="#rec2423688503" class="nav-header__menu-item" data-section="industries">Отрасли</a> <a href="#rec2423698673" class="nav-header__menu-item" data-section="tech">Технологии</a> <a href="#rec2441067283" class="nav-header__menu-item" data-section="workflow">Этапы работ</a> <a href="#rec2453378743" class="nav-header__menu-item" data-section="cases">Документы</a> <a href="#rec2423720173" class="nav-header__menu-item" data-section="contacts">Контакты</a> </nav> <!-- Правая часть: кнопка --> <div class="nav-header__right"> <a href="#rec2423720173" class="nav-header__cta">Связаться</a> </div> </div> </header> <style>
+.nav-header,
+.nav-header * { box-sizing: border-box; }
+.nav-header input,
+.nav-header textarea,
+.nav-header select { font: inherit; }
+
+.nav-header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 1000;
+  width: 100%;
+  backdrop-filter: blur(8px);
+  background-color: rgba(255, 255, 255, 0.95);
+  border-bottom: 1px solid rgba(242, 169, 0, 0.15);
+  color: #0D1B2A;
+}
+
+.nav-header__container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 20px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 80px;
+  font-family: var(--t-headline-font, sans-serif);
+  background-color: #ffffff;
+}
+
+/* Левая часть: логотип */
+.nav-header__left {
+  display: flex;
+  align-items: center;
+  flex-shrink: 0;
+}
+
+.nav-header__logo-wrapper {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.nav-header__logo-image {
+  height: 60px;
+  width: auto;
+  flex-shrink: 0;
+}
+
+/* Центральная часть: меню */
+.nav-header__menu {
+  display: flex;
+  gap: 40px;
+  align-items: center;
+  flex: 1;
+  justify-content: center;
+}
+
+.nav-header__menu-item {
+  position: relative;
+  font-size: 14px;
+  font-weight: 500;
+  color: #0D1B2A;
+  text-decoration: none;
+  font-family: var(--t-text-font, sans-serif);
+  padding: 4px 0;
+  transition: color 0.3s ease;
+}
+
+.nav-header__menu-item::after {
+  content: '';
+  position: absolute;
+  bottom: -4px;
+  left: 50%;
+  width: 0;
+  height: 2px;
+  background-color: #F2A900;
+  transform: translateX(-50%);
+  transition: width 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.nav-header__menu-item:hover {
+  color: #F2A900;
+}
+
+.nav-header__menu-item:hover::after {
+  width: 100%;
+}
+
+/* Правая часть: кнопка */
+.nav-header__right {
+  display: flex;
+  align-items: center;
+  flex-shrink: 0;
+}
+
+.nav-header__cta {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 12px 32px;
+  font-size: 14px;
+  font-weight: 600;
+  color: #F2A900;
+  background-color: transparent;
+  border: 2px solid #F2A900;
+  font-family: var(--t-text-font, sans-serif);
+  cursor: pointer;
+  transition: all 0.3s ease;
+  letter-spacing: 0.3px;
+  text-decoration: none;
+}
+
+.nav-header__cta:hover {
+  background-color: #F2A900;
+  color: #0D1B2A;
+  border-color: #F2A900;
+}
+
+.nav-header__cta:focus-visible {
+  outline: 2px solid #F2A900;
+  outline-offset: 2px;
+}
+
+/* Адаптив */
+@media (max-width: 960px) {
+  .nav-header__container {
+    height: 70px;
+  }
+
+  .nav-header__menu {
+    gap: 24px;
+  }
+
+  .nav-header__logo-image {
+    height: 50px;
+  }
+
+  .nav-header__menu-item {
+    font-size: 13px;
+  }
+
+  .nav-header__cta {
+    padding: 10px 24px;
+    font-size: 13px;
+  }
+}
+
+@media (max-width: 768px) {
+  .nav-header__container {
+    height: 70px;
+    gap: 16px;
+  }
+
+  .nav-header__menu {
+    gap: 16px;
+    flex: 0;
+    transform: translateX(-8px);
+  }
+
+  .nav-header__menu-item {
+    font-size: 12px;
+    padding: 2px 0;
+  }
+
+  .nav-header__cta {
+    padding: 8px 16px;
+    font-size: 12px;
+  }
+}
+
+@media (max-width: 640px) {
+  .nav-header__container {
+    height: 64px;
+  }
+
+  .nav-header__menu {
+    gap: 12px;
+    transform: translateX(-4px);
+  }
+
+  .nav-header__logo-image {
+    height: 45px;
+  }
+
+  .nav-header__cta {
+    padding: 8px 14px;
+    font-size: 11px;
+  }
+
+  .nav-header__menu-item {
+    font-size: 11px;
+  }
+}
+
+@media (max-width: 480px) {
+  .nav-header__container {
+    height: 60px;
+    padding: 0 16px;
+  }
+
+  .nav-header__menu {
+    gap: 8px;
+    order: 3;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    flex-direction: column;
+    background-color: #ffffff;
+    padding: 16px 20px;
+    display: none;
+    width: 100%;
+    border-bottom: 1px solid rgba(242, 169, 0, 0.15);
+  }
+
+  .nav-header__menu.is-open {
+    display: flex;
+  }
+
+  .nav-header__menu-item {
+    font-size: 13px;
+    padding: 8px 0;
+    width: 100%;
+  }
+
+  .nav-header__menu-item::after {
+    bottom: 4px;
+  }
+
+  .nav-header__cta {
+    width: 100%;
+    text-align: center;
+  }
+}
+</style> <script>
+(function() {
+  // Если нужна мобильная версия с выпадающим меню, разкомментируй этот код:
+  /*
+  const header = document.querySelector('.nav-header');
+  const menu = document.querySelector('.nav-header__menu');
+  
+  // При клике на любой пункт меню
+  const menuItems = document.querySelectorAll('.nav-header__menu-item');
+  menuItems.forEach(item => {
+    item.addEventListener('click', function(e) {
+      // Если нужна обработка - можешь добавить логику здесь
+      // Пример: e.preventDefault(); и дальше твоя логика
+    });
+  });
+
+  // Кнопка "Связаться"
+  const ctaBtn = document.querySelector('.nav-header__cta');
+  ctaBtn.addEventListener('click', function() {
+    // Твоя логика для кнопки "Связаться"
+  });
+  */
+})();
+</script> <style data-vb-overrides="true">
+.nav-header__menu-item {
+    font-family: var(--t-headline-font);
+    color: #0D1B2A;
+}
+
+.nav-header__cta {
+    font-family: var(--t-headline-font);
+    border-width: 2px;
+    color: #F2A900;
+}
+
+.nav-header__container {
+    background-color: #ffffff;
+}
+/* Убираем любые изменения цвета от Tilda */
+.nav-header__menu-item,
+.nav-header__menu-item:link,
+.nav-header__menu-item:visited,
+.nav-header__menu-item:hover,
+.nav-header__menu-item:active,
+.nav-header__menu-item:focus {
+    color: #0D1B2A !important;
+}
+
+/* Если Tilda добавляет класс активному пункту */
+.nav-header__menu-item.t-active,
+.nav-header__menu-item.active {
+    color: #0D1B2A !important;
+}
+
+/* Запрещаем Tilda менять цвет через родителя */
+/* Только пункты меню */
+.nav-header__menu > .nav-header__menu-item,
+.nav-header__menu > .nav-header__menu-item:link,
+.nav-header__menu > .nav-header__menu-item:visited,
+.nav-header__menu > .nav-header__menu-item:hover,
+.nav-header__menu > .nav-header__menu-item:focus,
+.nav-header__menu > .nav-header__menu-item:active {
+    color: #0D1B2A !important;
+}
+
+/* Активный пункт */
+.nav-header__menu > .nav-header__menu-item.t-active,
+.nav-header__menu > .nav-header__menu-item.active {
+    color: #0D1B2A !important;
+}
+.nav-header__right .nav-header__cta,
+.nav-header__right .nav-header__cta:link,
+.nav-header__right .nav-header__cta:visited,
+.nav-header__right .nav-header__cta:hover,
+.nav-header__right .nav-header__cta:focus,
+.nav-header__right .nav-header__cta:active {
+    color: #F2A900 !important;
+    border-color: #F2A900 !important;
+}
+
+.nav-header__right .nav-header__cta:hover {
+    background: #F2A900 !important;
+    color: #0D1B2A !important;
+}
+</style> <!-- nominify end --> </div> </div>

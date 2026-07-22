@@ -1,0 +1,131 @@
+/* ==========================================================================
+   Дополнения к экспорту Tilda.
+   Блоки заказчика не трогаются. Здесь только то, чего в одностраничнике
+   быть не могло: отступ под фиксированной шапкой на внутренних страницах
+   и текстовые разделы, куда можно наращивать текст.
+   Шрифты и цвета взяты из их же вёрстки.
+   ========================================================================== */
+
+:root {
+  --sgs-navy:   #0D1B2A;
+  --sgs-amber:  #F2A900;
+  --sgs-line:   rgba(255, 255, 255, 0.14);
+  --sgs-text:   #E6ECF2;
+  --sgs-muted:  #A9B6C4;
+}
+
+/* --- Отступ под шапкой ---------------------------------------------------
+   Шапка у них position: fixed. На главной первым идёт первый экран,
+   который это учитывает. На внутренних страницах блок начинался бы
+   под шапкой, поэтому подставляем распорку той же высоты. */
+.sgs-header-offset { height: 80px; background: var(--sgs-navy); }
+@media (max-width: 960px) { .sgs-header-offset { height: 70px; } }
+@media (max-width: 640px) { .sgs-header-offset { height: 64px; } }
+@media (max-width: 480px) { .sgs-header-offset { height: 60px; } }
+
+/* --- Текстовый раздел ----------------------------------------------------
+   Обычный поток вместо абсолютного позиционирования Tilda Zero:
+   сюда можно добавлять сколько угодно текста, ничего не разъедется. */
+.sgs-text {
+  background: var(--sgs-navy);
+  color: var(--sgs-text);
+  font-family: 'Manrope', sans-serif;
+  padding: clamp(40px, 6vw, 90px) 20px;
+}
+.sgs-text__inner { max-width: 1200px; margin: 0 auto; }
+
+.sgs-text__eyebrow {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-family: 'Source Code Pro', monospace;
+  font-size: 13px;
+  font-weight: 500;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--sgs-amber);
+  margin: 0 0 18px;
+}
+.sgs-text__eyebrow::before {
+  content: "";
+  width: 40px; height: 1px;
+  background: var(--sgs-amber);
+  flex: none;
+}
+
+.sgs-text h2 {
+  font-size: clamp(26px, 3.4vw, 44px);
+  font-weight: 700;
+  line-height: 1.15;
+  letter-spacing: -0.02em;
+  margin: 0 0 24px;
+  color: #fff;
+}
+.sgs-text h3 {
+  font-size: clamp(18px, 1.6vw, 22px);
+  font-weight: 700;
+  line-height: 1.3;
+  margin: 36px 0 12px;
+  color: #fff;
+}
+.sgs-text p {
+  font-size: clamp(15px, 1.15vw, 17px);
+  line-height: 1.65;
+  color: var(--sgs-muted);
+  margin: 0 0 14px;
+  max-width: 74ch;
+}
+.sgs-text p strong, .sgs-text strong { color: var(--sgs-text); font-weight: 600; }
+.sgs-text a { color: var(--sgs-amber); }
+
+/* Двухколоночная раскладка: слева заголовок, справа текст.
+   Повторяет ритм их секций «Какие задачи мы решаем» и «Технологии». */
+.sgs-text__cols { display: grid; gap: clamp(20px, 3vw, 56px); }
+@media (min-width: 900px) {
+  .sgs-text__cols { grid-template-columns: minmax(0, 5fr) minmax(0, 7fr); align-items: start; }
+}
+
+/* Перечень работ. Взят из отраслевых материалов заказчика. */
+.sgs-list { list-style: none; margin: 0; padding: 0; }
+.sgs-list li {
+  position: relative;
+  padding: 12px 0 12px 26px;
+  border-bottom: 1px solid var(--sgs-line);
+  font-size: clamp(15px, 1.1vw, 16px);
+  line-height: 1.55;
+  color: var(--sgs-text);
+}
+.sgs-list li::before {
+  content: "";
+  position: absolute;
+  left: 0; top: 22px;
+  width: 12px; height: 1px;
+  background: var(--sgs-amber);
+}
+
+/* Ссылки на смежные разделы */
+.sgs-links { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 28px; }
+.sgs-links a {
+  display: inline-block;
+  padding: 11px 18px;
+  border: 1px solid var(--sgs-line);
+  font-family: 'Source Code Pro', monospace;
+  font-size: 12px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--sgs-text);
+  transition: border-color .2s ease, color .2s ease;
+}
+.sgs-links a:hover { border-color: var(--sgs-amber); color: var(--sgs-amber); }
+
+/* Светлый вариант раздела, чтобы чередовать с тёмными блоками */
+.sgs-text--light {
+  background: #F4F6F8;
+  --sgs-text: #0D1B2A;
+  --sgs-muted: #4A5C70;
+  --sgs-line: rgba(13, 27, 42, 0.14);
+  color: var(--sgs-text);
+}
+.sgs-text--light h2, .sgs-text--light h3 { color: var(--sgs-navy); }
+.sgs-text--light .sgs-text__eyebrow { color: #8A6100; }
+.sgs-text--light .sgs-text__eyebrow::before { background: #8A6100; }

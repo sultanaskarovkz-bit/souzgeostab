@@ -1,5 +1,0 @@
-User-agent: *
-Allow: /
-Disallow: /files/tmp/
-
-Sitemap: https://souyzgeostab.kz/sitemap.xml

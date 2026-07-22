@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<title>Сверка: оригинал и новая сборка</title>
+<style>
+  body { margin:0; background:#23262b; font:13px system-ui; color:#cfd6de; }
+  .bar { display:flex; gap:0; padding:6px 10px; background:#15181c; }
+  .bar b { flex:1; font-weight:600; color:#fff; }
+  .row { display:flex; gap:0; }
+  iframe { border:0; border-right:2px solid #f2a900; display:block; background:#0d1b2a; }
+</style>
+</head>
+<body>
+  <div class="bar"><b>ОРИГИНАЛ Tilda (:4174)</b><b>НОВАЯ СБОРКА (:4173)</b></div>
+  <div class="row">
+    <iframe id="a"></iframe>
+    <iframe id="b"></iframe>
+  </div>
+<script>
+  // ?o=page151351773.html — страница оригинала, ?n=/ — страница новой сборки
+  var q = new URLSearchParams(location.search);
+  var w = Math.floor((window.innerWidth - 2) / 2);
+  var h = q.get('h') || 5000;
+  var a = document.getElementById('a'), b = document.getElementById('b');
+  a.width = w; b.width = w; a.height = h; b.height = h;
+  a.src = 'http://localhost:4174/' + (q.get('o') || 'page151351773.html');
+  b.src = 'http://localhost:4173' + (q.get('n') || '/');
+</script>
+</body>
+</html>
