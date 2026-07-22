@@ -49,11 +49,13 @@ const EMAIL_NEW = 'info@souyzgeostab.kz';
 /* --- Пересчёт путей под глубину страницы --------------------------------- */
 function rebase(html, prefix) {
   if (!prefix) return html;
+  // Кавычки в экспорте встречаются и двойные, и одинарные: часть картинок
+  // записана как data-original='images/...'. Учитываем оба варианта.
   return html
-    .replace(/((?:src|href|data-original|data-lazy-original|content)=")(?=(?:images|css|js|files)\/)/g, `$1${prefix}`)
+    .replace(/((?:src|href|data-original|data-lazy-original|content)=["'])(?=(?:images|css|js|files)\/)/g, `$1${prefix}`)
     .replace(/url\((['"]?)(?=(?:images|css|js|files)\/)/g, `url($1${prefix}`)
-    .replace(/srcset="([^"]*)"/g, (_, v) =>
-      `srcset="${v.replace(/(^|,\s*)(?=(?:images|css|js|files)\/)/g, `$1${prefix}`)}"`);
+    .replace(/srcset=(["'])([^"']*)\1/g, (_, q, v) =>
+      `srcset=${q}${v.replace(/(^|,\s*)(?=(?:images|css|js|files)\/)/g, `$1${prefix}`)}${q}`);
 }
 
 /* --- Ссылки меню и кнопок ------------------------------------------------ */
@@ -155,9 +157,10 @@ async function buildHead(page, prefix) {
     .replace(/<link rel="canonical" href="[^"]*">/,
       `<link rel="canonical" href="https://souyzgeostab.kz${page.url}">`);
 
-  // Дополнительный CSS под текстовые разделы
-  head = head.replace('</head>', '');
   head += `\n<link rel="stylesheet" href="${prefix}css/site-extra.css" type="text/css" media="all" />`;
+  // Приём заявок на свой обработчик вместо forms.tildacdn.com
+  head += `\n<script>window.SGS_FORM_ENDPOINT="${prefix}form.php";</script>`;
+  head += `\n<script src="${prefix}js/site-forms.js" charset="utf-8"></script>`;
 
   return rebase(head, prefix);
 }

@@ -1,4 +1,4 @@
-<?php
+﻿<?php
 /**
  * Приём заявок с сайта. Отправляет письмо и пишет строку в CSV.
  *
@@ -11,8 +11,8 @@
 
 declare(strict_types=1);
 
-$TO   = 'souzgeostab@mail.ru';                 // TODO: заменить на рабочий ящик
-$FROM = 'noreply@souyzgeostab.kz';             // TODO: создать ящик на домене
+$TO   = 'info@souyzgeostab.kz';
+$FROM = 'noreply@souyzgeostab.kz';            // TODO: создать ящик на домене
 $LOG  = __DIR__ . '/data/leads.csv';
 
 header('Content-Type: application/json; charset=utf-8');
@@ -29,25 +29,33 @@ if (!empty($_POST['company_website'])) {
     exit;
 }
 
-$field = static function (string $key, int $max = 2000): string {
-    $v = $_POST[$key] ?? '';
-    if (!is_string($v)) return '';
-    $v = trim($v);
-    // Вырезаем переводы строк из коротких полей — через них подставляют
-    // лишние заголовки письма
-    if ($max <= 300) $v = str_replace(["\r", "\n"], ' ', $v);
-    return mb_substr($v, 0, $max);
+/**
+ * Форму строит скрипт Tilda, поэтому имена полей приходят её собственные:
+ * «имя», «Phone», «Email», «ОПИСАНИЕ ПРОБЛЕМЫ». Проверяем оба набора,
+ * чтобы обработчик пережил и замену формы на обычную.
+ */
+$field = static function (array $keys, int $max = 2000): string {
+    foreach ($keys as $key) {
+        $v = $_POST[$key] ?? '';
+        if (!is_string($v) || trim($v) === '') continue;
+        $v = trim($v);
+        // Вырезаем переводы строк из коротких полей: через них подставляют
+        // лишние заголовки письма
+        if ($max <= 300) $v = str_replace(["\r", "\n"], ' ', $v);
+        return mb_substr($v, 0, $max);
+    }
+    return '';
 };
 
-$name    = $field('name', 200);
-$phone   = $field('phone', 60);
-$email   = $field('email', 200);
-$message = $field('message', 4000);
-$page    = $field('page', 300);
+$name    = $field(['name', 'имя', 'Имя', 'Name'], 200);
+$phone   = $field(['phone', 'Phone', 'tildaspec-phone-part[]'], 60);
+$email   = $field(['email', 'Email'], 200);
+$message = $field(['message', 'ОПИСАНИЕ ПРОБЛЕМЫ', 'Комментарий'], 4000);
+$page    = $field(['page', 'tildaspec-formname'], 300);
 
 $utm = [];
 foreach (['utm_source', 'utm_medium', 'utm_campaign', 'utm_term', 'utm_content'] as $k) {
-    $utm[$k] = $field($k, 200);
+    $utm[$k] = $field([$k], 200);
 }
 
 // Телефон — единственное по-настоящему обязательное поле: по нему перезванивают

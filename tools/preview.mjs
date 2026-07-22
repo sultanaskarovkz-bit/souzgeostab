@@ -31,6 +31,20 @@ const TYPES = {
 createServer(async (req, res) => {
   let url = decodeURIComponent(req.url.split('?')[0]);
 
+  // Заглушка обработчика заявок: PHP локально не выполняется, а проверить
+  // отправку формы нужно. Пишет полученные поля в консоль сервера.
+  if (req.method === 'POST' && url.endsWith('/form.php')) {
+    const chunks = [];
+    for await (const c of req) chunks.push(c);
+    const raw = Buffer.concat(chunks).toString('utf8');
+    const fields = [...raw.matchAll(/name="([^"]+)"\r\n\r\n([\s\S]*?)\r\n--/g)]
+      .map(([, k, v]) => `${k}=${v}`).filter((s) => !s.endsWith('='));
+    console.log('ЗАЯВКА: ' + (fields.join('; ') || '(пусто)'));
+    res.writeHead(200, { 'Content-Type': 'application/json; charset=utf-8' });
+    res.end(JSON.stringify({ ok: true, test: true }));
+    return;
+  }
+
   // Не выпускаем за пределы папки сайта
   const safe = normalize(url).replace(/^(\.\.[/\\])+/, '');
   let file = join(ROOT, safe);
