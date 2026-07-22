@@ -1,6 +1,6 @@
-# СоюзГеоСтаб — конфигурация Apache
-# Главное здесь — блок 301-редиректов: старые адреса Tilda уже проиндексированы,
-# и без переадресации на переезде теряется всё накопленное.
+# СоюзГеоСтаб - конфигурация Apache
+# Главное здесь - 301-редиректы: старые адреса Tilda проиндексированы,
+# и без переадресации на переезде потеряется накопленное.
 
 Options -Indexes
 DirectoryIndex index.html index.php
@@ -16,30 +16,30 @@ DirectoryIndex index.html index.php
   RewriteRule ^(.*)$ https://%1/$1 [R=301,L]
 
   # --- Старые ЧПУ Tilda -> новая структура ------------------------------
-  RewriteRule ^o-nas/?$                                  /o-kompanii/                              [R=301,L]
-  RewriteRule ^kontakty\.html?$                          /kontakty/                                [R=301,L]
-  RewriteRule ^tehnologii/?$                             /tehnologii/                              [R=301,L]
+  RewriteRule ^tehnologii/?$                              /tehnologii/                      [R=301,L]
+  RewriteRule ^kontakty/?$                                /kontakty/                        [R=301,L]
+  RewriteRule ^o-nas/?$                                   /                                 [R=301,L]
 
-  RewriteRule ^transportnaya-infrastruktura/?$           /otrasli/transportnaya/                   [R=301,L]
-  RewriteRule ^gornodobyvayushchaya-otrasl/?$            /otrasli/gornodobyvayushchaya/            [R=301,L]
-  RewriteRule ^stroitelnaya-otrasl/?$                    /otrasli/stroitelnaya/                    [R=301,L]
-  RewriteRule ^gidrotekhnicheskaya-infrastruktura/?$     /otrasli/gidrotehnicheskaya/              [R=301,L]
-  RewriteRule ^toplivno-energeticheskaya-infrastruktura/?$ /otrasli/toplivno-energeticheskaya/     [R=301,L]
-  RewriteRule ^inzhenernye-izyskaniya-i-soprovozhdenie/?$ /tehnologii/geofizicheskiy-kontrol/      [R=301,L]
+  RewriteRule ^gornodobyvayushchaya-otrasl/?$             /otrasli/shahty-i-karery/                  [R=301,L]
+  RewriteRule ^stroitelnaya-otrasl/?$                     /otrasli/zdaniya-i-sooruzheniya/           [R=301,L]
+  RewriteRule ^transportnaya-infrastruktura/?$            /otrasli/dorogi-zhd-aerodromy/             [R=301,L]
+  RewriteRule ^gidrotekhnicheskaya-infrastruktura/?$      /otrasli/gidrotehnicheskie-sooruzheniya/   [R=301,L]
+  RewriteRule ^toplivno-energeticheskaya-infrastruktura/?$ /otrasli/promyshlennye-obekty/            [R=301,L]
+  RewriteRule ^inzhenernye-izyskaniya-i-soprovozhdenie/?$ /tehnologii/geofizicheskiy-kontrol/        [R=301,L]
 
-  # --- Старые технические адреса Tilda ----------------------------------
+  # --- Технические адреса экспорта Tilda --------------------------------
   RewriteRule ^page151351773\.html$   /                                          [R=301,L]
   RewriteRule ^page124825003\.html$   /                                          [R=301,L]
   RewriteRule ^page124813563\.html$   /                                          [R=301,L]
   RewriteRule ^page125108153\.html$   /                                          [R=301,L]
-  RewriteRule ^page125260053\.html$   /o-kompanii/                               [R=301,L]
+  RewriteRule ^page125260053\.html$   /                                          [R=301,L]
   RewriteRule ^page125532463\.html$   /tehnologii/                               [R=301,L]
   RewriteRule ^page125597943\.html$   /kontakty/                                 [R=301,L]
-  RewriteRule ^page125598063\.html$   /otrasli/transportnaya/                    [R=301,L]
-  RewriteRule ^page134650393\.html$   /otrasli/gornodobyvayushchaya/             [R=301,L]
-  RewriteRule ^page134652573\.html$   /otrasli/gidrotehnicheskaya/               [R=301,L]
-  RewriteRule ^page134655203\.html$   /otrasli/stroitelnaya/                     [R=301,L]
-  RewriteRule ^page134656523\.html$   /otrasli/toplivno-energeticheskaya/        [R=301,L]
+  RewriteRule ^page125598063\.html$   /otrasli/dorogi-zhd-aerodromy/             [R=301,L]
+  RewriteRule ^page134650393\.html$   /otrasli/shahty-i-karery/                  [R=301,L]
+  RewriteRule ^page134652573\.html$   /otrasli/gidrotehnicheskie-sooruzheniya/   [R=301,L]
+  RewriteRule ^page134655203\.html$   /otrasli/zdaniya-i-sooruzheniya/           [R=301,L]
+  RewriteRule ^page134656523\.html$   /otrasli/promyshlennye-obekty/             [R=301,L]
   RewriteRule ^page134660273\.html$   /tehnologii/geofizicheskiy-kontrol/        [R=301,L]
   RewriteRule ^page153727883\.html$   /                                          [R=301,L]
 
@@ -51,7 +51,10 @@ DirectoryIndex index.html index.php
   RewriteRule ^(.*)$ /$1/ [R=301,L]
 </IfModule>
 
-ErrorDocument 404 /404.html
+# Служебная папка сборщика наружу не отдаётся
+RedirectMatch 404 ^/tools/
+
+ErrorDocument 404 /index.html
 
 # --- Сжатие --------------------------------------------------------------
 <IfModule mod_deflate.c>
@@ -65,28 +68,23 @@ ErrorDocument 404 /404.html
   ExpiresActive On
   ExpiresByType text/css                "access plus 1 year"
   ExpiresByType application/javascript  "access plus 1 year"
-  ExpiresByType image/webp              "access plus 1 year"
   ExpiresByType image/png               "access plus 1 year"
   ExpiresByType image/jpeg              "access plus 1 year"
   ExpiresByType image/svg+xml           "access plus 1 year"
+  ExpiresByType image/webp              "access plus 1 year"
+  ExpiresByType video/mp4               "access plus 1 year"
   ExpiresByType application/pdf         "access plus 1 month"
-  # HTML не кэшируем надолго: правки должны доезжать до пользователя сразу
+  # HTML не кэшируем: правки должны доезжать до пользователя сразу
   ExpiresByType text/html               "access plus 0 seconds"
 </IfModule>
 
 <IfModule mod_headers.c>
   Header set X-Content-Type-Options "nosniff"
-  Header set X-Frame-Options "SAMEORIGIN"
   Header set Referrer-Policy "strict-origin-when-cross-origin"
-  <FilesMatch "\.(css|js|webp|png|jpe?g|svg|woff2)$">
-    Header set Cache-Control "public, max-age=31536000, immutable"
-  </FilesMatch>
 </IfModule>
 
-# Без этого Apache отдаёт манифест как поток байтов и браузер его игнорирует
-AddType application/manifest+json .webmanifest
 AddType image/webp .webp
 AddType image/svg+xml .svg
-AddType image/x-icon .ico
+AddType video/mp4 .mp4
 
 AddDefaultCharset UTF-8

@@ -118,6 +118,62 @@
 }
 .sgs-links a:hover { border-color: var(--sgs-amber); color: var(--sgs-amber); }
 
+/* --- Заголовок подстраницы ----------------------------------------------- */
+.sgs-h1 {
+  font-family: 'Manrope', sans-serif;
+  font-size: clamp(30px, 4.4vw, 56px);
+  font-weight: 700;
+  line-height: 1.08;
+  letter-spacing: -0.025em;
+  margin: 0 0 16px;
+  color: #fff;
+}
+.sgs-sub {
+  font-size: clamp(16px, 1.5vw, 20px);
+  font-weight: 600;
+  color: var(--sgs-amber);
+  margin: 0 0 18px;
+}
+.sgs-lead {
+  font-size: clamp(16px, 1.35vw, 19px);
+  line-height: 1.6;
+  color: var(--sgs-text);
+  max-width: 78ch;
+  margin: 0;
+}
+
+/* --- Таблица параметров --------------------------------------------------- */
+.sgs-spec-wrap { margin-top: 22px; }
+.sgs-spec { width: 100%; border-collapse: collapse; }
+.sgs-spec th, .sgs-spec td {
+  padding: 13px 16px 13px 0;
+  text-align: left;
+  vertical-align: top;
+  border-bottom: 1px solid var(--sgs-line);
+  font-size: 15px;
+  line-height: 1.5;
+}
+.sgs-spec th { width: 45%; font-weight: 500; color: var(--sgs-muted); }
+.sgs-spec td { color: var(--sgs-text); font-weight: 500; }
+/* На узком экране таблица разворачивается в список */
+@media (max-width: 560px) {
+  .sgs-spec, .sgs-spec tbody, .sgs-spec tr, .sgs-spec th, .sgs-spec td { display: block; width: auto; }
+  .sgs-spec tr { padding-block: 12px; border-bottom: 1px solid var(--sgs-line); }
+  .sgs-spec th { padding: 0 0 4px; border: 0; font-size: 12px; letter-spacing: .06em; text-transform: uppercase; }
+  .sgs-spec td { padding: 0; border: 0; }
+}
+
+/* --- Кликабельные карточки ------------------------------------------------
+   Карточка отрасли уже имеет position: relative и cursor: pointer -
+   добавляется только прозрачная ссылка на всю её площадь, чтобы переход
+   был настоящей ссылкой, а не обработчиком на скрипте. */
+.sgs-card-link { position: absolute; inset: 0; z-index: 5; }
+
+/* Заголовок технологии - ссылка. Подчёркивание появляется при наведении,
+   чтобы не менять вид блока в покое. */
+a.sgs-tech-link { text-decoration: none; transition: color .2s ease; }
+a.sgs-tech-link:hover { color: var(--sgs-amber) !important; }
+
 /* --- Раздел «Документы» --------------------------------------------------
    Единственная правка оформления, которую попросил заказчик.
    Было: заголовок слева, а ссылки отдельным блоком по центру и на 105px

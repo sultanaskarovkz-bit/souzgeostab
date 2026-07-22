@@ -6,9 +6,12 @@
    ровно такими, как на souyzgeostab.kz. Меняется только одно -
    якорные ссылки меню становятся ссылками на отдельные страницы. */
 
-import { readFile, writeFile, mkdir, readdir } from 'node:fs/promises';
+import { readFile, writeFile, mkdir } from 'node:fs/promises';
 import { join, dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
+
+import { otrasli } from './content/otrasli.mjs';
+import { tehnologii } from './content/tehnologii.mjs';
 
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), '..');
 const PARTS = join(ROOT, 'tools', 'parts');
@@ -72,6 +75,37 @@ function relink(html, prefix) {
     /(class="nav-header__logo-image[^>]*>)/,
     '$1</a>'
   );
+  return html;
+}
+
+/* --- Карточки становятся ссылками ---------------------------------------
+   Блоки не переверстываются. В карточку отраслей добавляется прозрачная
+   ссылка на всю её площадь (у карточки уже position: relative), а
+   у технологий в ссылку превращается сам заголовок - именно так Tilda
+   и оформляет кликабельные элементы Zero-блоков. */
+function linkIndustryCards(html, prefix) {
+  for (const item of otrasli) {
+    const at = html.indexOf(`>${item.card}<`);
+    if (at === -1) continue;
+
+    const open = html.lastIndexOf('<div class="ind-industries__card"', at);
+    if (open === -1) continue;
+
+    const tagEnd = html.indexOf('>', open) + 1;
+    const link = `<a class="sgs-card-link" href="${prefix}otrasli/${item.slug}/" aria-label="${item.card}"></a>`;
+    html = html.slice(0, tagEnd) + link + html.slice(tagEnd);
+  }
+  return html;
+}
+
+function linkTechTitles(html, prefix) {
+  for (const item of tehnologii) {
+    const re = new RegExp(
+      `<div class='tn-atom'(field='[^']*')>${item.card.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}</div>`
+    );
+    html = html.replace(re,
+      `<a class='tn-atom sgs-tech-link' href="${prefix}tehnologii/${item.slug}/" $1>${item.card}</a>`);
+  }
   return html;
 }
 
@@ -177,6 +211,8 @@ async function buildPage(page) {
   for (const rec of page.records) {
     let html = await part(rec);
     if (rec === R.header) html = enableMobileMenu(html);
+    if (rec === R.fields) html = linkIndustryCards(html, prefix);
+    if (rec === R.tech) html = linkTechTitles(html, prefix);
     html = relink(html, prefix);
     html = rebase(html, prefix);
     html = fixEmail(html);
@@ -187,6 +223,7 @@ async function buildPage(page) {
     // заголовок блока уезжает под шапку.
     if (rec === R.header && page.url !== '/') {
       chunks.push('<div class="sgs-header-offset"></div>');
+      if (page.bodyAfterHeader) chunks.push(page.bodyAfterHeader(prefix));
     }
 
     // Текстовый раздел ставится сразу после своего блока
@@ -216,6 +253,107 @@ ${page.extra || ''}
   await mkdir(dirname(file), { recursive: true });
   await writeFile(file, body, 'utf8');
   return page.url;
+}
+
+/* --- Содержимое подстраниц ----------------------------------------------
+   Текст идёт обычным потоком в стилистике сайта: шрифты, цвета и ритм
+   те же, но высота не задана жёстко, поэтому объём можно наращивать. */
+const esc = (s = '') => String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+
+function sectionOpen(mod, eyebrow, title) {
+  return `<section class="sgs-text${mod ? ' ' + mod : ''}">
+  <div class="sgs-text__inner">
+    ${eyebrow ? `<p class="sgs-text__eyebrow">${esc(eyebrow)}</p>` : ''}
+    ${title ? `<h2>${esc(title)}</h2>` : ''}`;
+}
+const sectionClose = `  </div>
+</section>`;
+
+const listOf = (items) =>
+  `<ul class="sgs-list">${items.map((i) => `<li>${esc(i)}</li>`).join('')}</ul>`;
+
+const parasOf = (items) => items.map((p) => `<p>${esc(p)}</p>`).join('\n      ');
+
+function specTable(rows) {
+  return `<div class="sgs-spec-wrap"><table class="sgs-spec"><tbody>${
+    rows.map(([k, v]) => `<tr><th>${esc(k)}</th><td>${esc(v)}</td></tr>`).join('')
+  }</tbody></table></div>`;
+}
+
+function relatedLinks(title, items, prefix) {
+  if (!items || !items.length) return '';
+  return `${sectionOpen('', 'Смотрите также', title)}
+    <div class="sgs-links">${items.map((i) => `<a href="${prefix}${i.href}">${esc(i.label)}</a>`).join('')}</div>
+${sectionClose}`;
+}
+
+function industryBody(item, prefix) {
+  const techLinks = item.tech
+    .map((s) => tehnologii.find((t) => t.slug === s))
+    .filter(Boolean)
+    .map((t) => ({ label: t.h1, href: `tehnologii/${t.slug}/` }));
+
+  return `
+${sectionOpen('', 'Отрасль', null)}
+    <h1 class="sgs-h1">${esc(item.h1)}</h1>
+    <p class="sgs-lead">${esc(item.lead)}</p>
+${sectionClose}
+
+${sectionOpen('sgs-text--light', 'Состав работ', 'Что выполняем на объектах отрасли')}
+    ${listOf(item.works)}
+${sectionClose}
+
+${sectionOpen('', 'Обследование', item.signsTitle)}
+    <div class="sgs-text__cols">
+      <div><p>Решение подбирается по фактическому состоянию объекта. Ниже - то, что определяет схему работ и объём.</p></div>
+      <div>${parasOf(item.signs)}</div>
+    </div>
+${sectionClose}
+
+${sectionOpen('sgs-text--light', 'Производство работ', item.howTitle)}
+    ${parasOf(item.how)}
+${sectionClose}
+
+${sectionOpen('', 'Условия', item.limitsTitle)}
+    ${listOf(item.limits)}
+${sectionClose}
+
+${relatedLinks('Технологии, которые применяем в отрасли', techLinks, prefix)}
+`;
+}
+
+function techBody(item, prefix) {
+  const indLinks = item.otrasli
+    .map((s) => otrasli.find((o) => o.slug === s))
+    .filter(Boolean)
+    .map((o) => ({ label: o.h1, href: `otrasli/${o.slug}/` }));
+
+  return `
+${sectionOpen('', 'Технология', null)}
+    <h1 class="sgs-h1">${esc(item.h1)}</h1>
+    ${item.sub ? `<p class="sgs-sub">${esc(item.sub)}</p>` : ''}
+    <p class="sgs-lead">${esc(item.lead)}</p>
+${sectionClose}
+
+${sectionOpen('sgs-text--light', 'Принцип', item.principleTitle)}
+    ${parasOf(item.principle)}
+${sectionClose}
+
+${sectionOpen('', 'Преимущества', item.benefitsTitle)}
+    ${listOf(item.benefits)}
+${sectionClose}
+
+${sectionOpen('sgs-text--light', 'Параметры', item.specsTitle)}
+    <p>Значения приведены как диапазоны применимости технологии. Параметры для конкретного объекта уточняются по результатам обследования.</p>
+    ${specTable(item.specs)}
+${sectionClose}
+
+${sectionOpen('', 'Контроль', item.controlTitle)}
+    ${parasOf(item.control)}
+${sectionClose}
+
+${relatedLinks('Отрасли, где применяется технология', indLinks, prefix)}
+`;
 }
 
 /* --- Страницы ------------------------------------------------------------ */
@@ -266,8 +404,59 @@ const PAGES = [
   }
 ];
 
+/* Подстраницы отраслей и технологий: шапка, текст, форма, подвал */
+for (const item of otrasli) {
+  PAGES.push({
+    url: `/otrasli/${item.slug}/`,
+    title: item.seoTitle,
+    desc: item.seoDesc,
+    records: [R.header, R.form, R.footer, ...UTIL],
+    bodyAfterHeader: (prefix) => industryBody(item, prefix)
+  });
+}
+
+for (const item of tehnologii) {
+  PAGES.push({
+    url: `/tehnologii/${item.slug}/`,
+    title: item.seoTitle,
+    desc: item.seoDesc,
+    records: [R.header, R.form, R.footer, ...UTIL],
+    bodyAfterHeader: (prefix) => techBody(item, prefix)
+  });
+}
+
 const made = [];
 for (const p of PAGES) made.push(await buildPage(p));
 
+/* --- Карта сайта и robots ------------------------------------------------ */
+const DOMAIN = 'https://souyzgeostab.kz';
+const today = new Date().toISOString().slice(0, 10);
+
+const priority = (url) => {
+  if (url === '/') return '1.0';
+  if (url.split('/').filter(Boolean).length === 1) return '0.9';
+  return '0.8';
+};
+
+await writeFile(join(ROOT, 'sitemap.xml'),
+  `<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+${made.map((u) => `  <url>
+    <loc>${DOMAIN}${u}</loc>
+    <lastmod>${today}</lastmod>
+    <priority>${priority(u)}</priority>
+  </url>`).join('\n')}
+</urlset>
+`, 'utf8');
+
+await writeFile(join(ROOT, 'robots.txt'),
+  `User-agent: *
+Allow: /
+Disallow: /tools/
+
+Sitemap: ${DOMAIN}/sitemap.xml
+`, 'utf8');
+
 console.log(`Собрано страниц: ${made.length}`);
 made.forEach((u) => console.log('  ' + u));
+console.log('sitemap.xml, robots.txt');
